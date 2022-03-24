@@ -39,6 +39,7 @@ PATH_JBMONO_REGULAR=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_JBMONO_REG
 PATH_JBMONO_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_JBMONO_BOLD"`
 PATH_BIZUD_REGULAR=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_REGULAR"`
 PATH_BIZUD_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_BOLD"`
+PATH_IDEOGRAPHIC_SPACE=`find $FONTS_DIRECTORIES -follow -name 'ideographic_space.sfd'`
 
 MODIFIED_FONT_JBMONO_REGULAR='modified_jbmono_regular.sfd'
 MODIFIED_FONT_JBMONO_BOLD='modified_jbmono_bold.sfd'
@@ -103,6 +104,7 @@ while (i < SizeOf(input_list))
   Reencode("unicode")
   ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
 
+  MergeFonts("${PATH_IDEOGRAPHIC_SPACE}")
   MergeFonts("${WORK_DIR}/" + output_list[i])
 
   Print("Save " + output_list[i])
