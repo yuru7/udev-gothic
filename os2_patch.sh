@@ -67,3 +67,5 @@ done
 #   mv "$P" "${P}_orig"
 #   ttx -m "${P}_orig" "${P%%.ttf}.ttx"
 # done
+
+rm -f "${BASE_DIR}/"*.ttx

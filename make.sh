@@ -10,6 +10,7 @@ FAMILYNAME="UDEVGothic"
 
 "${BASE_DIR}/generator.sh" $FAMILYNAME $VERSION
 "${BASE_DIR}/os2_patch.sh" $FAMILYNAME
+"${BASE_DIR}/cmap_patch.sh" $FAMILYNAME
 
 if [ ! -d "$BUILD_DIR" ]
 then

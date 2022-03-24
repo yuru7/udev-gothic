@@ -168,10 +168,13 @@ done
 for f in "${PATH_BIZUD_REGULAR}" "${PATH_BIZUD_BOLD}"
 do
   cp "$f" "$WORK_DIR"
-  pyftsubset "${WORK_DIR}/${f##*/}" '*' --drop-tables+=vhea --drop-tables+=vmtx 
+  target="${WORK_DIR}/${f##*/}"
+  pyftsubset "${target}" '*' --drop-tables+=vhea --drop-tables+=vmtx --layout-features='*' --glyph-names --symbol-cmap --legacy-cmap --notdef-glyph --notdef-outline --recommended-glyphs --name-IDs='*' --name-legacy --name-languages='*'
 done
 
 pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
 mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
 pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
 mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+
+rm "${WORK_DIR}/"*.ttx
