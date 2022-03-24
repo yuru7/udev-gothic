@@ -45,7 +45,7 @@ function buildCmap() {
   # 適用するttxファイルを作成
   (
     egrep -v 'cmap_format_14| uvs=' "$ttx_path" | awk '/<\/cmap>/ {exit} {print}'
-    cat "$CMAP_MASTER_XML" | egrep 'cmap_format_14|name=' | grep -v 'glyph'
+    cat "$CMAP_MASTER_XML" | egrep 'cmap_format_14|name='
     echo '</cmap>'
     awk 'BEGIN {prFlag = 0} /<post>/ {prFlag = 1} prFlag == 1 {print}' "$ttx_path"
   ) > $GENERATED_CMAP

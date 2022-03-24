@@ -32,8 +32,8 @@ FONTS_DIRECTORIES="${BASE_DIR}/source/"
 
 SRC_FONT_JBMONO_REGULAR='JetBrainsMonoNL-Regular.ttf'
 SRC_FONT_JBMONO_BOLD='JetBrainsMonoNL-Bold.ttf'
-SRC_FONT_BIZUD_REGULAR='BIZUDGothic-Regular.ttf'
-SRC_FONT_BIZUD_BOLD='BIZUDGothic-Bold.ttf'
+SRC_FONT_BIZUD_REGULAR='fontforge_export_BIZUDGothic-Regular.ttf'
+SRC_FONT_BIZUD_BOLD='fontforge_export_BIZUDGothic-Bold.ttf'
 
 PATH_JBMONO_REGULAR=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_JBMONO_REGULAR"`
 PATH_JBMONO_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_JBMONO_BOLD"`
@@ -176,5 +176,3 @@ pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${SRC_FONT
 mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
 pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
 mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
-
-rm "${WORK_DIR}/"*.ttx
