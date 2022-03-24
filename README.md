@@ -1,6 +1,8 @@
 # udev-gothic
 UDEV Gothic は、ユニバーサルデザインフォントの [BIZ UDゴシック](https://github.com/googlefonts/morisawa-biz-ud-gothic) と、 開発者向けフォントの [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) を合成した、プログラミング向けフォントです。
 
+[👉 ダウンロード](https://github.com/yuru7/udev-gothic/releases)
+
 以下の特徴を備えています。
 
 - モリサワ社の考えるユニバーサルデザインが盛り込まれたBIZ UDゴシック由来の日本語文字
