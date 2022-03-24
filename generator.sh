@@ -8,11 +8,12 @@ then
   mkdir "$WORK_DIR"
 fi
 
-FAMILYNAME="$1"
-DISP_FAMILYNAME="UDEV Gothic"
+LIGA_FLAG="$1"
+VERSION="$2"
+FAMILYNAME="$3"
+DISP_FAMILYNAME="$4"
 DISP_FAMILYNAME_JP="UDEV ゴシック"
 
-VERSION="$2"
 COPYRIGHT="Copyright (c) 2022, Yuko OTAWARA"
 
 EM_ASCENT=1802
@@ -32,6 +33,11 @@ FONTS_DIRECTORIES="${BASE_DIR}/source/"
 
 SRC_FONT_JBMONO_REGULAR='JetBrainsMonoNL-Regular.ttf'
 SRC_FONT_JBMONO_BOLD='JetBrainsMonoNL-Bold.ttf'
+if [ "$LIGA_FLAG" == 1 ]
+then
+  SRC_FONT_JBMONO_REGULAR='JetBrainsMono-Regular.ttf'
+  SRC_FONT_JBMONO_BOLD='JetBrainsMono-Bold.ttf'
+fi
 SRC_FONT_BIZUD_REGULAR='fontforge_export_BIZUDGothic-Regular.ttf'
 SRC_FONT_BIZUD_BOLD='fontforge_export_BIZUDGothic-Bold.ttf'
 
