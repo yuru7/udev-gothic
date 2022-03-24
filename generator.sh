@@ -20,8 +20,8 @@ EM_ASCENT=1802
 EM_DESCENT=246
 EM=$(($EM_ASCENT + $EM_DESCENT))
 
-WIN_ASCENT=1802
-WIN_DESCENT=380
+ASCENT=$(($EM_ASCENT + 143))
+DESCENT=$(($EM_DESCENT + 134))
 TYPO_LINE_GAP=0
 
 HALF_WIDTH=$(($EM / 2))
@@ -125,13 +125,13 @@ while (i < SizeOf(input_list))
   SetOS2Value("TypoDescentIsOffset",     0)
   SetOS2Value("HHeadAscentIsOffset",     0)
   SetOS2Value("HHeadDescentIsOffset",    0)
-  SetOS2Value("WinAscent",             ${WIN_ASCENT})
-  SetOS2Value("WinDescent",            ${WIN_DESCENT})
-  SetOS2Value("TypoAscent",            ${EM_ASCENT})
-  SetOS2Value("TypoDescent",          -${EM_DESCENT})
+  SetOS2Value("WinAscent",             ${ASCENT})
+  SetOS2Value("WinDescent",            ${DESCENT})
+  SetOS2Value("TypoAscent",            ${ASCENT})
+  SetOS2Value("TypoDescent",          -${DESCENT})
   SetOS2Value("TypoLineGap",           ${TYPO_LINE_GAP})
-  SetOS2Value("HHeadAscent",           ${WIN_ASCENT})
-  SetOS2Value("HHeadDescent",         -${WIN_DESCENT})
+  SetOS2Value("HHeadAscent",           ${ASCENT})
+  SetOS2Value("HHeadDescent",         -${DESCENT})
   SetOS2Value("HHeadLineGap",            0)
   SetPanose([2, 11, panoseweight_list[i], 9, 2, 2, 3, 2, 2, 7])
 
