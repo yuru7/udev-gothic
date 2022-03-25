@@ -8,11 +8,12 @@ then
   mkdir "$WORK_DIR"
 fi
 
-LIGA_FLAG="$1"
-VERSION="$2"
-FAMILYNAME="$3"
-DISP_FAMILYNAME="$4"
+VERSION="$1"
+FAMILYNAME="$2"
+DISP_FAMILYNAME="$3"
 DISP_FAMILYNAME_JP="UDEV ゴシック"
+LIGA_FLAG="$4"  # 0: リガチャなし 1: リガチャあり
+JPDOC_FLAG="$5"  # 0: JetBrains Monoの記号優先 1: 日本語ドキュメントで使用頻度の高い記号はBIZ UDゴシック優先
 
 COPYRIGHT="Copyright (c) 2022, Yuko OTAWARA"
 
@@ -100,6 +101,37 @@ while (i < SizeOf(input_list))
   width = ${HALF_WIDTH}
   Move(move_x, 0)
   SetWidth(width, 0)
+
+  # JPDOC版では、日本語ドキュメントで使用頻度の高い記号はBIZ UDゴシックを優先して適用する
+  if ($JPDOC_FLAG == 1)
+    Select(0u00F7) # ÷
+    SelectMore(0u00D7) # ×
+    SelectMore(0u21D2) # ⇒
+    SelectMore(0u21D4) # ⇔
+    SelectMore(0u21E7, 0u21E8) # ⇧-⇨
+    SelectMore(0u25A0, 0u25A1) # ■-□
+    SelectMore(0u25B2, 0u25B3) # ▲-△
+    SelectMore(0u25B6, 0u25B7) # ▶-▷
+    SelectMore(0u25BC, 0u25BD) # ▼-▽
+    SelectMore(0u25C0, 0u25C1) # ◀-◁
+    SelectMore(0u25C6, 0u25C7) # ◆-◇
+    SelectMore(0u25CE, 0u25CF) # ◎-●
+    SelectMore(0u25EF) # ◯
+    SelectMore(0u221A) # √
+    SelectMore(0u221E) # ∞
+    SelectMore(0u2010, 0u2022) # ‐-•
+    SelectMore(0u2026) # …
+    SelectMore(0u2190, 0u2194) # ←-↔
+    SelectMore(0u2196, 0u2199) # ↖-↙
+    SelectMore(0u2200) # ∀
+    SelectMore(0u2202, 0u2203) # ∂-∃
+    SelectMore(0u2208, 0u220C) # ∈-∌
+    SelectMore(0u2211, 0u2212) # ∑-−
+    SelectMore(0u2225, 0u222B) # ∥-∫
+    SelectMore(0u2260, 0u2262) # ≠-≢
+    SelectMore(0u2282, 0u2287) # ⊂-⊇
+    Clear()
+  endif
 
   # パスの小数点以下を切り捨て
   SelectWorthOutputting()
