@@ -46,6 +46,7 @@ PATH_JBMONO_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_JBMONO_BOLD"`
 PATH_BIZUD_REGULAR=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_REGULAR"`
 PATH_BIZUD_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_BOLD"`
 PATH_IDEOGRAPHIC_SPACE=`find $FONTS_DIRECTORIES -follow -name 'ideographic_space.sfd'`
+PATH_ZERO=`find $FONTS_DIRECTORIES -follow -name 'zero.sfd'`
 
 MODIFIED_FONT_JBMONO_REGULAR='modified_jbmono_regular.sfd'
 MODIFIED_FONT_JBMONO_BOLD='modified_jbmono_bold.sfd'
@@ -78,6 +79,10 @@ while (i < SizeOf(input_list))
   # フォントファイルを開く
   Print("Open " + input_list[i])
   Open(input_list[i])
+
+  # 0 をスラッシュゼロにする
+  Select(0u0030); Clear()
+  MergeFonts("${PATH_ZERO}")
 
   # サイズ調整
   SelectWorthOutputting()
