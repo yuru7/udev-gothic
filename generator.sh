@@ -47,7 +47,8 @@ PATH_JBMONO_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_JBMONO_BOLD"`
 PATH_BIZUD_REGULAR=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_REGULAR"`
 PATH_BIZUD_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_BOLD"`
 PATH_IDEOGRAPHIC_SPACE=`find $FONTS_DIRECTORIES -follow -name 'ideographic_space.sfd'`
-PATH_ZERO=`find $FONTS_DIRECTORIES -follow -name 'zero.sfd'`
+PATH_ZERO_REGULAR=`find $FONTS_DIRECTORIES -follow -name 'zero-Regular.sfd'`
+PATH_ZERO_BOLD=`find $FONTS_DIRECTORIES -follow -name 'zero-Bold.sfd'`
 
 MODIFIED_FONT_JBMONO_REGULAR='modified_jbmono_regular.sfd'
 MODIFIED_FONT_JBMONO_BOLD='modified_jbmono_bold.sfd'
@@ -71,6 +72,8 @@ input_list = ["${PATH_JBMONO_REGULAR}", \\
   "${PATH_JBMONO_BOLD}"]
 output_list = ["${MODIFIED_FONT_JBMONO_REGULAR}", \\
   "${MODIFIED_FONT_JBMONO_BOLD}"]
+zero_list = ["${PATH_ZERO_REGULAR}", \\
+  "${PATH_ZERO_BOLD}"]
 fontstyle_list    = ["Regular", "Bold"]
 fontweight_list = [400, 700]
 panoseweight_list = [5, 8]
@@ -83,7 +86,7 @@ while (i < SizeOf(input_list))
 
   # 0 をスラッシュゼロにする
   Select(0u0030); Clear()
-  MergeFonts("${PATH_ZERO}")
+  MergeFonts(zero_list[i])
 
   # サイズ調整
   SelectWorthOutputting()
