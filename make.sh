@@ -46,13 +46,11 @@ rm -rf "$WORK_DIR"
 # Nerd Fonts版の生成 - リガチャなし
 "${BASE_DIR}/generator.sh" "$VERSION" "$FAMILYNAME_NF" "$DISP_FAMILYNAME_NF" 0 0 1
 "${BASE_DIR}/os2_patch.sh" "$FAMILYNAME_NF"
-"${BASE_DIR}/cmap_patch.sh" "$FAMILYNAME_NF"
 mv "$WORK_DIR/$FAMILYNAME_NF"*.ttf "$BUILD_DIR"
 rm -rf "$WORK_DIR"
 
 # Nerd Fonts版の生成 - リガチャあり
 "${BASE_DIR}/generator.sh" "$VERSION" "$FAMILYNAME_NF_LIGA" "$DISP_FAMILYNAME_NF_LIGA" 1 0 1
 "${BASE_DIR}/os2_patch.sh" "$FAMILYNAME_NF_LIGA"
-"${BASE_DIR}/cmap_patch.sh" "$FAMILYNAME_NF_LIGA"
 mv "$WORK_DIR/$FAMILYNAME_NF_LIGA"*.ttf "$BUILD_DIR"
 rm -rf "$WORK_DIR"

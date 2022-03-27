@@ -54,7 +54,8 @@ PATH_NERD_FONTS=`find $FONTS_DIRECTORIES -follow -name 'JetBrains Mono Regular N
 
 MODIFIED_FONT_JBMONO_REGULAR='modified_jbmono_regular.sfd'
 MODIFIED_FONT_JBMONO_BOLD='modified_jbmono_bold.sfd'
-MODIFIED_FONT_NERD_FONTS='tmp_nerd_fonts.ttf'
+MODIFIED_FONT_NERD_FONTS_REGULAR='tmp_nerd_fonts_regular.ttf'
+MODIFIED_FONT_NERD_FONTS_BOLD='tmp_nerd_fonts_bold.ttf'
 
 if [ -z "$SRC_FONT_JBMONO_REGULAR" -o \
 -z "$SRC_FONT_JBMONO_BOLD" -o \
@@ -93,7 +94,7 @@ while (i < SizeOf(input_list))
 
   # サイズ調整
   SelectWorthOutputting()
-  #UnlinkReference()
+  UnlinkReference()
   ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
   Scale(${SHRINK_X}, ${SHRINK_Y}, 0, 0)
 
@@ -209,70 +210,93 @@ endloop
 
 # Nerd Fonts グリフの準備
 if (${NERD_FONTS_FLAG} == 1)
-  Open("$PATH_NERD_FONTS")
+  input_list = ["${PATH_BIZUD_REGULAR}", \\
+    "${PATH_BIZUD_BOLD}"]
+  output_list = ["${MODIFIED_FONT_NERD_FONTS_REGULAR}", \\
+    "${MODIFIED_FONT_NERD_FONTS_BOLD}"]
 
-  # 必要なグリフのみ残し、残りを削除
-  SelectNone()
-  # Powerline フォント -> JetBrains Mono標準のものを使用する
-  #SelectMore(0ue0a0, 0ue0a2)
-  #SelectMore(0ue0b0, 0ue0b3)
-  # 拡張版 Powerline フォント
-  SelectMore(0ue0a3)
-  SelectMore(0ue0b4, 0ue0c8)
-  SelectMore(0ue0ca)
-  SelectMore(0ue0cc, 0ue0d2)
-  SelectMore(0ue0d4)
-  # IEC Power Symbols
-  SelectMore(0u23fb, 0u23fe)
-  SelectMore(0u2b58)
-  # Octicons
-  SelectMore(0u2665)
-  SelectMore(0u26A1)
-  SelectMore(0uf27c)
-  SelectMore(0uf400, 0uf4a9)
-  # Font Awesome Extension
-  SelectMore(0ue200, 0ue2a9)
-  # Weather
-  SelectMore(0ue300, 0ue3e3)
-  # Seti-UI + Custom
-  SelectMore(0ue5fa, 0ue62e)
-  # Devicons
-  SelectMore(0ue700, 0ue7c5)
-  # Font Awesome
-  SelectMore(0uf000, 0uf2e0)
-  # Font Logos (Formerly Font Linux)
-  SelectMore(0uf300, 0uf31c)
-  # Material Design Icons
-  SelectMore(0uf500, 0ufd46)
-  # Pomicons -> 商用不可のため除外
-  SelectFewer(0ue000, 0ue00d)
-  # 選択していない箇所を選択して削除する
-  SelectInvert(); Clear()
+  i = 0
+  while (i < SizeOf(input_list))
+    New()
+    Reencode("unicode")
+    Open("$PATH_NERD_FONTS")
 
-  # サイズ調整
-  SelectWorthOutputting()
-  ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
-  Scale(${SHRINK_X}, ${SHRINK_Y}, 0, 0)
-  SetWidth(width, 0)
+    # 必要なグリフのみ残し、残りを削除
+    SelectNone()
+    # Powerline フォント -> JetBrains Mono標準のものを使用する
+    #SelectMore(0ue0a0, 0ue0a2)
+    #SelectMore(0ue0b0, 0ue0b3)
+    # 拡張版 Powerline フォント
+    SelectMore(0ue0a3)
+    SelectMore(0ue0b4, 0ue0c8)
+    SelectMore(0ue0ca)
+    SelectMore(0ue0cc, 0ue0d2)
+    SelectMore(0ue0d4)
+    # IEC Power Symbols
+    SelectMore(0u23fb, 0u23fe)
+    SelectMore(0u2b58)
+    # Octicons
+    SelectMore(0u2665)
+    SelectMore(0u26A1)
+    SelectMore(0uf27c)
+    SelectMore(0uf400, 0uf4a9)
+    # Font Awesome Extension
+    SelectMore(0ue200, 0ue2a9)
+    # Weather
+    SelectMore(0ue300, 0ue3e3)
+    # Seti-UI + Custom
+    SelectMore(0ue5fa, 0ue62e)
+    # Devicons
+    SelectMore(0ue700, 0ue7c5)
+    # Font Awesome
+    SelectMore(0uf000, 0uf2e0)
+    # Font Logos (Formerly Font Linux)
+    SelectMore(0uf300, 0uf31c)
+    # Material Design Icons
+    SelectMore(0uf500, 0ufd46)
+    # Pomicons -> 商用不可のため除外
+    SelectFewer(0ue000, 0ue00d)
+    # 選択していない箇所を選択して削除する
+    SelectInvert(); Clear()
 
-  # 高さ調整
-  SetOS2Value("WinAscentIsOffset",       0)
-  SetOS2Value("WinDescentIsOffset",      0)
-  SetOS2Value("TypoAscentIsOffset",      0)
-  SetOS2Value("TypoDescentIsOffset",     0)
-  SetOS2Value("HHeadAscentIsOffset",     0)
-  SetOS2Value("HHeadDescentIsOffset",    0)
-  SetOS2Value("WinAscent",             ${ASCENT})
-  SetOS2Value("WinDescent",            ${DESCENT})
-  SetOS2Value("TypoAscent",            ${ASCENT})
-  SetOS2Value("TypoDescent",          -${DESCENT})
-  SetOS2Value("TypoLineGap",           ${TYPO_LINE_GAP})
-  SetOS2Value("HHeadAscent",           ${ASCENT})
-  SetOS2Value("HHeadDescent",         -${DESCENT})
-  SetOS2Value("HHeadLineGap",            0)
+    lookups = GetLookups("GSUB"); numlookups = SizeOf(lookups); j = 0;
+    while (j < numlookups)
+      RemoveLookup(lookups[j]); j++
+    endloop
+    lookups = GetLookups("GPOS"); numlookups = SizeOf(lookups); j = 0;
+    while (j < numlookups)
+      RemoveLookup(lookups[j]); j++
+    endloop
 
-  Generate("${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS}", "")
-  Close()
+    # サイズ調整
+    SelectWorthOutputting()
+    ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
+    Scale(${SHRINK_X}, ${SHRINK_Y}, 0, 0)
+    SetWidth(width, 0)
+
+    MergeFonts(input_list[i])
+
+    # 高さ調整
+    SetOS2Value("WinAscentIsOffset",       0)
+    SetOS2Value("WinDescentIsOffset",      0)
+    SetOS2Value("TypoAscentIsOffset",      0)
+    SetOS2Value("TypoDescentIsOffset",     0)
+    SetOS2Value("HHeadAscentIsOffset",     0)
+    SetOS2Value("HHeadDescentIsOffset",    0)
+    SetOS2Value("WinAscent",             ${ASCENT})
+    SetOS2Value("WinDescent",            ${DESCENT})
+    SetOS2Value("TypoAscent",            ${ASCENT})
+    SetOS2Value("TypoDescent",          -${DESCENT})
+    SetOS2Value("TypoLineGap",           ${TYPO_LINE_GAP})
+    SetOS2Value("HHeadAscent",           ${ASCENT})
+    SetOS2Value("HHeadDescent",         -${DESCENT})
+    SetOS2Value("HHeadLineGap",            0)
+
+    Generate("${WORK_DIR}/" + output_list[i], "")
+    Close()
+
+    i += 1
+  endloop
 endif
 _EOT_
 
@@ -299,11 +323,9 @@ then
   pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
   mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
 else
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS}"
-  pyftmerge merged.ttf "${WORK_DIR}/${SRC_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS_REGULAR}"
   mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
 
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS}"
-  pyftmerge merged.ttf "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS_BOLD}"
   mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
 fi
