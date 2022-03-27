@@ -14,6 +14,7 @@ DISP_FAMILYNAME="$3"
 DISP_FAMILYNAME_JP="UDEV ゴシック"
 LIGA_FLAG="$4"  # 0: リガチャなし 1: リガチャあり
 JPDOC_FLAG="$5"  # 0: JetBrains Monoの記号優先 1: 日本語ドキュメントで使用頻度の高い記号はBIZ UDゴシック優先
+NERD_FONTS_FLAG="$6"  # 0: Nerd Fonts なし 1: Nerd Fonts あり
 
 COPYRIGHT="Copyright (c) 2022, Yuko OTAWARA"
 
@@ -49,9 +50,11 @@ PATH_BIZUD_BOLD=`find $FONTS_DIRECTORIES -follow -name "$SRC_FONT_BIZUD_BOLD"`
 PATH_IDEOGRAPHIC_SPACE=`find $FONTS_DIRECTORIES -follow -name 'ideographic_space.sfd'`
 PATH_ZERO_REGULAR=`find $FONTS_DIRECTORIES -follow -name 'zero-Regular.sfd'`
 PATH_ZERO_BOLD=`find $FONTS_DIRECTORIES -follow -name 'zero-Bold.sfd'`
+PATH_NERD_FONTS=`find $FONTS_DIRECTORIES -follow -name 'JetBrains Mono Regular Nerd Font Complete.ttf'`
 
 MODIFIED_FONT_JBMONO_REGULAR='modified_jbmono_regular.sfd'
 MODIFIED_FONT_JBMONO_BOLD='modified_jbmono_bold.sfd'
+MODIFIED_FONT_NERD_FONTS='tmp_nerd_fonts.ttf'
 
 if [ -z "$SRC_FONT_JBMONO_REGULAR" -o \
 -z "$SRC_FONT_JBMONO_BOLD" -o \
@@ -203,6 +206,74 @@ while (i < SizeOf(input_list))
 
   i += 1
 endloop
+
+# Nerd Fonts グリフの準備
+if (${NERD_FONTS_FLAG} == 1)
+  Open("$PATH_NERD_FONTS")
+
+  # 必要なグリフのみ残し、残りを削除
+  SelectNone()
+  # Powerline フォント -> JetBrains Mono標準のものを使用する
+  #SelectMore(0ue0a0, 0ue0a2)
+  #SelectMore(0ue0b0, 0ue0b3)
+  # 拡張版 Powerline フォント
+  SelectMore(0ue0a3)
+  SelectMore(0ue0b4, 0ue0c8)
+  SelectMore(0ue0ca)
+  SelectMore(0ue0cc, 0ue0d2)
+  SelectMore(0ue0d4)
+  # IEC Power Symbols
+  SelectMore(0u23fb, 0u23fe)
+  SelectMore(0u2b58)
+  # Octicons
+  SelectMore(0u2665)
+  SelectMore(0u26A1)
+  SelectMore(0uf27c)
+  SelectMore(0uf400, 0uf4a9)
+  # Font Awesome Extension
+  SelectMore(0ue200, 0ue2a9)
+  # Weather
+  SelectMore(0ue300, 0ue3e3)
+  # Seti-UI + Custom
+  SelectMore(0ue5fa, 0ue62e)
+  # Devicons
+  SelectMore(0ue700, 0ue7c5)
+  # Font Awesome
+  SelectMore(0uf000, 0uf2e0)
+  # Font Logos (Formerly Font Linux)
+  SelectMore(0uf300, 0uf31c)
+  # Material Design Icons
+  SelectMore(0uf500, 0ufd46)
+  # Pomicons -> 商用不可のため除外
+  SelectFewer(0ue000, 0ue00d)
+  # 選択していない箇所を選択して削除する
+  SelectInvert(); Clear()
+
+  # サイズ調整
+  SelectWorthOutputting()
+  ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
+  Scale(${SHRINK_X}, ${SHRINK_Y}, 0, 0)
+  SetWidth(width, 0)
+
+  # 高さ調整
+  SetOS2Value("WinAscentIsOffset",       0)
+  SetOS2Value("WinDescentIsOffset",      0)
+  SetOS2Value("TypoAscentIsOffset",      0)
+  SetOS2Value("TypoDescentIsOffset",     0)
+  SetOS2Value("HHeadAscentIsOffset",     0)
+  SetOS2Value("HHeadDescentIsOffset",    0)
+  SetOS2Value("WinAscent",             ${ASCENT})
+  SetOS2Value("WinDescent",            ${DESCENT})
+  SetOS2Value("TypoAscent",            ${ASCENT})
+  SetOS2Value("TypoDescent",          -${DESCENT})
+  SetOS2Value("TypoLineGap",           ${TYPO_LINE_GAP})
+  SetOS2Value("HHeadAscent",           ${ASCENT})
+  SetOS2Value("HHeadDescent",         -${DESCENT})
+  SetOS2Value("HHeadLineGap",            0)
+
+  Generate("${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS}", "")
+  Close()
+endif
 _EOT_
 
 /usr/local/bin/fontforge -script ${WORK_DIR}/${GEN_SCRIPT_JBMONO}
@@ -220,7 +291,19 @@ do
   pyftsubset "${target}" '*' --drop-tables+=vhea --drop-tables+=vmtx --layout-features='*' --glyph-names --symbol-cmap --legacy-cmap --notdef-glyph --notdef-outline --recommended-glyphs --name-IDs='*' --name-legacy --name-languages='*'
 done
 
-pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
-mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
-pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
-mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+if [ $NERD_FONTS_FLAG -ne 1 ]
+then
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
+
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+else
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS}"
+  pyftmerge merged.ttf "${WORK_DIR}/${SRC_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
+
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS}"
+  pyftmerge merged.ttf "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+fi
