@@ -9,8 +9,7 @@ BUILD_TMP_DIR="${BASE_DIR}/build_tmp"
 FAMILYNAME="$1"
 PREFIX="$2"
 
-FONT_PATTERN=${PREFIX}${FAMILYNAME}'[^3]*.ttf'
-FONT35_PATTERN=${PREFIX}${FAMILYNAME}35'*.ttf'
+FONT_PATTERN=${PREFIX}${FAMILYNAME}'*.ttf'
 
 CMAP_MASTER="${BASE_DIR}/source/cmap_format_14_master"
 TMP_CMAP_MASTER='tmp_cmap_format_14_master'
@@ -22,25 +21,6 @@ GENERATED_CMAP="${BUILD_TMP_DIR}/gen_cmap"
 
 function buildCmap() {
   ttx_path="$1"
-  # cmapマスタの作成
-  # (
-  #   awk 'NR > 1 {print}' "$CMAP_MASTER" | while read line
-  #   do
-  #     out_name=$(echo "$line" | awk -F, '{print $4}')
-  #     grep_out_name=$(egrep -m1 "name=\"${out_name}[#\"]" "$ttx_path" | perl -pe 's/^.+name="([^"]+?)".+/$1/')
-  #     if [ -z "$grep_out_name" ]; then
-  #       continue
-  #     fi
-  #     echo "$line" | awk -F, '{print $1 "," $2 "," $3 "," "'$grep_out_name'"}'
-  #   done
-  # ) > "$TMP_CMAP_MASTER"
-
-  # 追加するcmapタグを一時ファイルに書き出し
-  # awk -F, '
-  #   BEGIN {print "<cmap_format_14 platformID=\"0\" platEncID=\"5\">"}
-  #   NR > 1 && $4 != "" {print "<map uv=\"" $1 "\" uvs=\"" $3 "\" name=\"" $4 "\"/>"}
-  #   END {print "</cmap_format_14></cmap>"}
-  # ' "$TMP_CMAP_MASTER" > "$TMP_TTX"
 
   # 適用するttxファイルを作成
   (
@@ -70,9 +50,3 @@ echo '### Start cmap_patch ###'
 for f in ${BUILD_TMP_DIR}/${FONT_PATTERN}; do
   proc "$f"
 done
-
-# for f in $(ls ${BUILD_TMP_DIR}/${FONT35_PATTERN}); do
-#   proc "$f"
-# done
-
-#rm -f "${BUILD_TMP_DIR}/"*.ttx
