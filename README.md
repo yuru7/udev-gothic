@@ -16,10 +16,14 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 - BIZ UDゴシック相当の IVS (異体字シーケンス) に対応 (対応している異体字リストは [こちら](https://raw.githubusercontent.com/yuru7/udev-gothic/main/doc/ivs.txt))
 - 全角スペースの可視化
 - JetBrains Mono に含まれるリガチャに対応したバリエーションを同梱
-  - `UDEVGothicLG-<Weight>.ttf` のように、ファイル名に `LG` が含まれているものが対象
+  - `UDEVGothic*LG*-*.ttf` のように、ファイル名に `LG` が含まれているものが対象
 - 日本語文書で頻出する記号類 ( `← ↓ ↑ → □ ■ …` など) でBIZ UDゴシックの全角記号が優先して表示されるバリエーションを同梱
-  - `UDEVGothicJPDOC-<Weight>.ttf` のように、ファイル名に `JPDOC` が含まれているものが対象
+  - `UDEVGothic*JPDOC*-*.ttf` のように、ファイル名に `JPDOC` が含まれているものが対象
   - 標準の UDEV Gothic では、JetBrains Mono のグリフが優先されるため、該当の記号は通常版では半角で表示される
+- [Nerd Fonts](https://www.nerdfonts.com/) を合成したバリエーションを同梱
+  - `UDEVGothic*NF*-*.ttf` のように、ファイル名に `NF` が含まれているものが対象
+- JetBrains Mono を縮小せずに合成し、半角3:全角5の幅比率としたバリエーションを同梱
+  - `UDEVGothic35*-*.ttf` のように、ファイル名に `35` が含まれているものが対象
 
 ![image](https://user-images.githubusercontent.com/13458509/159846115-826e87f5-90e6-4f10-90f5-652e4790f0ff.png)
 
