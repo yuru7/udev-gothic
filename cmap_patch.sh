@@ -50,3 +50,5 @@ echo '### Start cmap_patch ###'
 for f in ${BUILD_TMP_DIR}/${FONT_PATTERN}; do
   proc "$f"
 done
+
+rm -f "${BUILD_TMP_DIR}/"*.ttx

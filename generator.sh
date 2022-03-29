@@ -17,8 +17,6 @@ JPDOC_FLAG="$5"  # 0: JetBrains Monoの記号優先 1: 日本語ドキュメン�
 NERD_FONTS_FLAG="$6"  # 0: Nerd Fonts なし 1: Nerd Fonts あり
 W35_FLAG="$7"  # 0: 通常幅 1: 半角3:全角5幅
 
-COPYRIGHT="Copyright (c) 2022, Yuko OTAWARA"
-
 EM_ASCENT=1802
 EM_DESCENT=246
 EM=$(($EM_ASCENT + $EM_DESCENT))
@@ -234,18 +232,17 @@ while (i < SizeOf(input_list))
   disp_fontfamily = "$DISP_FAMILYNAME"
   fontname_style = fontstyle_list[i]
   base_style = fontstyle_list[i]
-  copyright = "$COPYRIGHT"
+  copyright = "###COPYRIGHT###"
   version = "$VERSION"
 
-  SetFontNames(fontfamily + "-" + fontname_style, \\
-    disp_fontfamily, \\
-    disp_fontfamily + " " + fontstyle_list[i], \\
-    base_style, \\
-    copyright, version)
-
   # TTF名設定 - 英語
+  SetTTFName(0x409, 0, copyright)
+  SetTTFName(0x409, 1, disp_fontfamily)
   SetTTFName(0x409, 2, fontstyle_list[i])
   SetTTFName(0x409, 3, "FontForge 2.0 : " + \$fullname + " : " + Strftime("%d-%m-%Y", 0))
+  SetTTFName(0x409, 4, disp_fontfamily + " " + fontstyle_list[i])
+  SetTTFName(0x409, 5, version)
+  SetTTFName(0x409, 6, fontfamily + "-" + fontstyle_list[i])
   # TTF名設定 - 日本語
   # SetTTFName(0x411, 1, "${DISP_FAMILYNAME_JP}")
   # SetTTFName(0x411, 2, fontstyle_list[i])
