@@ -15,17 +15,20 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
   - `0` を従来のドットゼロからスラッシュゼロにするなど、BIZ UDゴシックとさらに調和すること目指した
 - BIZ UDゴシック相当の IVS (異体字シーケンス) に対応 (対応している異体字リストは [こちら](https://raw.githubusercontent.com/yuru7/udev-gothic/main/doc/ivs.txt))
 - 全角スペースの可視化
-- JetBrains Mono に含まれるリガチャに対応したバリエーションを同梱
-  - `UDEVGothic*LG*-*.ttf` のように、ファイル名に `LG` が含まれているものが対象
-- 日本語文書で頻出する記号類 ( `← ↓ ↑ → □ ■ …` など) でBIZ UDゴシックの全角記号が優先して表示されるバリエーションを同梱
-  - `UDEVGothic*JPDOC*-*.ttf` のように、ファイル名に `JPDOC` が含まれているものが対象
-  - 標準の UDEV Gothic では、JetBrains Mono のグリフが優先されるため、該当の記号は通常版では半角で表示される
-- [Nerd Fonts](https://www.nerdfonts.com/) を合成したバリエーションを同梱
-  - `UDEVGothic*NF*-*.ttf` のように、ファイル名に `NF` が含まれているものが対象
-- JetBrains Mono を縮小せずに合成し、半角3:全角5の幅比率としたバリエーションを同梱
-  - `UDEVGothic35*-*.ttf` のように、ファイル名に `35` が含まれているものが対象
+- 収録される文字の違い等による複数のバリエーションを用意 (下記参照)
 
-![image](https://user-images.githubusercontent.com/13458509/159846115-826e87f5-90e6-4f10-90f5-652e4790f0ff.png)
+### バリエーションについて
+
+|バリエーション|説明|命名パターン|
+|---|---|---|
+|日本語文書向け|日本語文書で頻出する記号類 ( `← ↓ ↑ → □ ■ …` など) がBIZ UDゴシックの全角記号で表示される。 ※通常版の UDEV Gothic では、JetBrains Mono のグリフが優先されるため半角で表示される。|`UDEVGothic*JPDOC*-*.ttf`<br>※ファイル名に `JPDOC` が含まれたもの|
+|リガチャ対応版|JetBrains Mono に含まれるリガチャに対応したバリエーション。|`UDEVGothic*LG*-*.ttf`<br>※ファイル名に `LG` が含まれたもの|
+|NerdFonts 対応版|[Nerd Fonts](https://www.nerdfonts.com/) を追加合成したバリエーション。拡張Powerline記号など、お洒落なターミナルで利用される記号を収録。|`UDEVGothic*NF*-*.ttf`<br>※ファイル名に `NF` が含まれたもの|
+|文字幅比率 半角3:全角5|JetBrains Mono を縮小せずに合成し、半角3:全角5の文字幅比率としたバリエーション。通常版と比べ、半角文字が広めに表示される。|`UDEVGothic35*-*.ttf`<br>※ファイル名に `35` が含まれたもの|
+
+## 表示サンプル
+
+![image](https://user-images.githubusercontent.com/13458509/160800245-9d9fce55-f980-46ce-b630-63e439fc3f27.png)
 
 |リガチャ ON|リガチャ OFF|
 |:---:|:---:|
