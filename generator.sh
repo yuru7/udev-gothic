@@ -60,6 +60,8 @@ PATH_NERD_FONTS=`find $FONTS_DIRECTORIES -follow -name 'JetBrains Mono Regular N
 
 MODIFIED_FONT_JBMONO_REGULAR='modified_jbmono_regular.sfd'
 MODIFIED_FONT_JBMONO_BOLD='modified_jbmono_bold.sfd'
+MODIFIED_FONT_BIZUD_REGULAR='modified_bizud_regular.ttf'
+MODIFIED_FONT_BIZUD_BOLD='modified_bizud_bold.ttf'
 MODIFIED_FONT_NERD_FONTS_REGULAR='tmp_nerd_fonts_regular.ttf'
 MODIFIED_FONT_NERD_FONTS_BOLD='tmp_nerd_fonts_bold.ttf'
 MODIFIED_FONT_BIZUD35_REGULAR='tmp_bizud_regular.ttf'
@@ -190,6 +192,19 @@ while (i < SizeOf(input_list))
     Clear()
   endif
 
+  # BIZ UDゴシックから削除するグリフリストの作成
+  array_end = 65535
+  exist_glyph_array = Array(array_end)
+  j = 0
+  while (j < array_end)
+    if (WorthOutputting(j))
+      exist_glyph_array[j] = 1
+    else
+      exist_glyph_array[j] = 0
+    endif
+    j++
+  endloop
+
   # パスの小数点以下を切り捨て
   SelectWorthOutputting()
   RoundToInt()
@@ -204,7 +219,6 @@ while (i < SizeOf(input_list))
   Reencode("unicode")
   ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
 
-  MergeFonts("${PATH_IDEOGRAPHIC_SPACE}")
   MergeFonts("${WORK_DIR}/" + output_list[i])
 
   Print("Save " + output_list[i])
@@ -261,10 +275,76 @@ while (i < SizeOf(input_list))
   i += 1
 endloop
 
+# BIZ UDゴシックの調整
+input_list = ["${PATH_BIZUD_REGULAR}", \\
+  "${PATH_BIZUD_BOLD}"]
+output_list = ["${MODIFIED_FONT_BIZUD_REGULAR}", \\
+  "${MODIFIED_FONT_BIZUD_BOLD}"]
+
+i = 0
+while (i < SizeOf(input_list))
+  New()
+  Reencode("unicode")
+  ScaleToEm(${EM_ASCENT}, ${EM_DESCENT})
+
+  MergeFonts(input_list[i])
+
+  SelectWorthOutputting()
+  UnlinkReference()
+
+  # リガチャが含まれる行にひらがな等の全角文字を入力すると、リガチャが解除される事象への対策
+  if ($LIGA_FLAG == 1)
+    lookups = GetLookups("GSUB"); numlookups = SizeOf(lookups); j = 0;
+    while (j < numlookups)
+      RemoveLookup(lookups[j])
+      j++
+    endloop
+  endif
+
+  # JetBrains Monoに含まれるグリフの削除
+  j = 0
+  while (j < array_end)
+    if (WorthOutputting(j))
+      Select(j)
+      if (exist_glyph_array[j] == 1)
+        Clear()
+      endif
+    endif
+    j++
+  endloop
+
+  # 全角スペースの可視化
+  Select(0u3000); Clear()
+  MergeFonts("${PATH_IDEOGRAPHIC_SPACE}")
+
+  # 高さ調整
+  SetOS2Value("WinAscentIsOffset",       0)
+  SetOS2Value("WinDescentIsOffset",      0)
+  SetOS2Value("TypoAscentIsOffset",      0)
+  SetOS2Value("TypoDescentIsOffset",     0)
+  SetOS2Value("HHeadAscentIsOffset",     0)
+  SetOS2Value("HHeadDescentIsOffset",    0)
+  SetOS2Value("WinAscent",             ${ASCENT})
+  SetOS2Value("WinDescent",            ${DESCENT})
+  SetOS2Value("TypoAscent",            ${ASCENT})
+  SetOS2Value("TypoDescent",          -${DESCENT})
+  SetOS2Value("TypoLineGap",           ${TYPO_LINE_GAP})
+  SetOS2Value("HHeadAscent",           ${ASCENT})
+  SetOS2Value("HHeadDescent",         -${DESCENT})
+  SetOS2Value("HHeadLineGap",            0)
+
+  # 修正後のフォントファイルを保存
+  Print("Save " + output_list[i])
+  Generate("${WORK_DIR}/" + output_list[i])
+  Close()
+
+  i++
+endloop
+
 # Nerd Fonts グリフの準備
 if (${NERD_FONTS_FLAG} == 1)
-  input_list = ["${PATH_BIZUD_REGULAR}", \\
-    "${PATH_BIZUD_BOLD}"]
+  input_list = ["${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR}", \\
+    "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD}"]
   output_list = ["${MODIFIED_FONT_NERD_FONTS_REGULAR}", \\
     "${MODIFIED_FONT_NERD_FONTS_BOLD}"]
 
@@ -304,6 +384,18 @@ if (${NERD_FONTS_FLAG} == 1)
       Move(move_x, 0)
     endif
 
+    # JetBrains Monoに含まれるグリフの削除
+    j = 0
+    while (j < array_end)
+      if (WorthOutputting(j))
+        Select(j)
+        if (exist_glyph_array[j] == 1)
+          Clear()
+        endif
+      endif
+      j++
+    endloop
+
     # 高さ調整
     SetOS2Value("WinAscentIsOffset",       0)
     SetOS2Value("WinDescentIsOffset",      0)
@@ -328,8 +420,8 @@ if (${NERD_FONTS_FLAG} == 1)
 elseif (${W35_FLAG} == 1)
   # 35幅版の準備
 
-  input_list = ["${PATH_BIZUD_REGULAR}", \\
-    "${PATH_BIZUD_BOLD}"]
+  input_list = ["${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR}", \\
+    "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD}"]
   output_list = ["${MODIFIED_FONT_BIZUD35_REGULAR}", \\
     "${MODIFIED_FONT_BIZUD35_BOLD}"]
 
@@ -378,12 +470,11 @@ do
 done
 
 # vhea, vmtxテーブル削除
-for f in "${PATH_BIZUD_REGULAR}" "${PATH_BIZUD_BOLD}"
-do
-  cp "$f" "$WORK_DIR"
-  target="${WORK_DIR}/${f##*/}"
-  pyftsubset "${target}" '*' --drop-tables+=vhea --drop-tables+=vmtx --layout-features='*' --glyph-names --symbol-cmap --legacy-cmap --notdef-glyph --notdef-outline --recommended-glyphs --name-IDs='*' --name-legacy --name-languages='*'
-done
+# for f in "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR}" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD}"
+# do
+#   target="${WORK_DIR}/${f##*/}"
+#   pyftsubset "${target}" '*' --drop-tables+=vhea --drop-tables+=vmtx --layout-features='*' --glyph-names --symbol-cmap --legacy-cmap --notdef-glyph --notdef-outline --recommended-glyphs --name-IDs='*' --name-legacy --name-languages='*'
+# done
 
 if [ $NERD_FONTS_FLAG -eq 1 ]
 then
@@ -400,9 +491,11 @@ then
   pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD35_BOLD}"
   mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
 else
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
+  # pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR}"
   mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
 
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${SRC_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
+  # pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD}"
   mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
 fi
