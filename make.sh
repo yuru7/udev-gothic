@@ -4,7 +4,7 @@ BASE_DIR=$(cd $(dirname $0); pwd)
 WORK_DIR="$BASE_DIR/build_tmp"
 BUILD_DIR="$BASE_DIR/build"
 
-VERSION='0.0.8'
+VERSION='0.0.9'
 
 FAMILYNAME="UDEVGothic"
 DISP_FAMILYNAME="UDEV Gothic"
