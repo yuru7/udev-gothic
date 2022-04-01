@@ -25,7 +25,9 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 | 文字幅比率 半角3:全角5 | JetBrains Mono を縮小せずに合成し、半角3:全角5の文字幅比率としたバリエーション。通常版と比べ、半角文字が広めに表示される。| `UDEVGothic35*-*.ttf`<br>※ファイル名に `35` が含まれたもの |
 | 日本語文書向け | 日本語文書で頻出する記号類 ( `← ↓ ↑ → □ ■ …` など) がBIZ UDゴシックの全角記号で表示される。 ※通常版の UDEV Gothic では、JetBrains Mono のグリフが優先されるため半角で表示される。| `UDEVGothic*JPDOC*-*.ttf`<br>※ファイル名に `JPDOC` が含まれたもの |
 | リガチャ対応版 | JetBrains Mono に含まれるリガチャに対応したバリエーション。 | `UDEVGothic*LG*-*.ttf`<br>※ファイル名に `LG` が含まれたもの |
-| NerdFonts 対応版 | [Nerd Fonts](https://www.nerdfonts.com/) を追加合成したバリエーション。拡張Powerline記号など、お洒落なターミナルで利用される記号を収録。| `UDEVGothic*NF*-*.ttf`<br>※ファイル名に `NF` が含まれたもの |
+| NerdFonts 対応版 | [Nerd Fonts](https://www.nerdfonts.com/) を追加合成したバリエーション。拡張Powerline記号など、お洒落なターミナルで利用される記号を収録。 ⚠ 制限事項あり (*1) | `UDEVGothic*NF*-*.ttf`<br>※ファイル名に `NF` が含まれたもの |
+
+> ⚠ *1: Nerd Fonts の仕様により一部の漢字グリフが Nerd Fonts グリフに上書きされるため、`﨑` のような旧字体など一部のコードポイントで、漢字ではなく Nerd Fonts のアイコンが表示されます。また、この影響で IVS (異体字シーケンス) にも当該バリエーションでは非対応となります。Nerd Fonts を必要とする用途以外は、NF版以外のバリエーションを利用することを推奨します。
 
 ## 表示サンプル
 
