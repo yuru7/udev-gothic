@@ -154,9 +154,11 @@ while (i < SizeOf(input_list))
   # 0 をスラッシュゼロにする
   Select(0u0030); Clear()
   MergeFonts(zero_list[i])
+  # スラッシュゼロの斜体変形
   if (${ITALIC_FLAG} == 1)
     Select(0u0030)
-    Italic(${ITALIC_ANGLE})
+    Italic(${ITALIC_ANGLE}, 1, 0, 1, 1, 1, 1)
+    Move(-44, 0)
   endif
 
   # サイズ調整
