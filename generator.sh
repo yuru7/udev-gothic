@@ -16,6 +16,7 @@ LIGA_FLAG="$4"  # 0: リガチャなし 1: リガチャあり
 JPDOC_FLAG="$5"  # 0: JetBrains Monoの記号優先 1: 日本語ドキュメントで使用頻度の高い記号はBIZ UDゴシック優先
 NERD_FONTS_FLAG="$6"  # 0: Nerd Fonts なし 1: Nerd Fonts あり
 W35_FLAG="$7"  # 0: 通常幅 1: 半角3:全角5幅
+ITALIC_FLAG="$8"  # 0: 非イタリック 1: イタリック
 
 EM_ASCENT=1802
 EM_DESCENT=246
@@ -25,9 +26,14 @@ ASCENT=$(($EM_ASCENT + 160))
 DESCENT=$(($EM_DESCENT + 170))
 TYPO_LINE_GAP=0
 
+ORIG_FULL_WIDTH=2048
+ORIG_HALF_WIDTH=$(($ORIG_FULL_WIDTH / 2))
+
 HALF_WIDTH=$(($EM / 2))
 SHRINK_X=90
 SHRINK_Y=99
+
+ITALIC_ANGLE=-9
 
 if [ $W35_FLAG -eq 1 ]
 then
@@ -41,10 +47,18 @@ FONTS_DIRECTORIES="${BASE_DIR}/source/"
 
 SRC_FONT_JBMONO_REGULAR='JetBrainsMonoNL-Regular.ttf'
 SRC_FONT_JBMONO_BOLD='JetBrainsMonoNL-Bold.ttf'
-if [ "$LIGA_FLAG" == 1 ]
+if [ "$LIGA_FLAG" == 0 -a "$ITALIC_FLAG" == 1 ]
+then
+  SRC_FONT_JBMONO_REGULAR='JetBrainsMonoNL-Italic.ttf'
+  SRC_FONT_JBMONO_BOLD='JetBrainsMonoNL-BoldItalic.ttf'
+elif [ "$LIGA_FLAG" == 1 -a "$ITALIC_FLAG" == 0 ]
 then
   SRC_FONT_JBMONO_REGULAR='JetBrainsMono-Regular.ttf'
   SRC_FONT_JBMONO_BOLD='JetBrainsMono-Bold.ttf'
+elif [ "$LIGA_FLAG" == 1 -a "$ITALIC_FLAG" == 1 ]
+then
+  SRC_FONT_JBMONO_REGULAR='JetBrainsMono-Italic.ttf'
+  SRC_FONT_JBMONO_BOLD='JetBrainsMono-BoldItalic.ttf'
 fi
 SRC_FONT_BIZUD_REGULAR='fontforge_export_BIZUDGothic-Regular.ttf'
 SRC_FONT_BIZUD_BOLD='fontforge_export_BIZUDGothic-Bold.ttf'
@@ -125,6 +139,9 @@ output_list = ["${MODIFIED_FONT_JBMONO_REGULAR}", \\
 zero_list = ["${PATH_ZERO_REGULAR}", \\
   "${PATH_ZERO_BOLD}"]
 fontstyle_list    = ["Regular", "Bold"]
+if (${ITALIC_FLAG} == 1)
+  fontstyle_list    = ["Italic", "Bold Italic"]
+endif
 fontweight_list = [400, 700]
 panoseweight_list = [5, 8]
 
@@ -137,6 +154,10 @@ while (i < SizeOf(input_list))
   # 0 をスラッシュゼロにする
   Select(0u0030); Clear()
   MergeFonts(zero_list[i])
+  if (${ITALIC_FLAG} == 1)
+    Select(0u0030)
+    Italic(${ITALIC_ANGLE})
+  endif
 
   # サイズ調整
   SelectWorthOutputting()
@@ -247,9 +268,18 @@ while (i < SizeOf(input_list))
     SetPanose([2, 11, panoseweight_list[i], 3, 2, 2, 3, 2, 2, 7])
   endif
 
+  fontname_style = fontstyle_list[i]
+  # 斜体の設定
+  if (Strstr(fontstyle_list[i], 'Italic') >= 0)
+    SetItalicAngle(${ITALIC_ANGLE})
+    if (Strstr(fontstyle_list[i], ' Italic') >= 0)
+      splited_style = StrSplit(fontstyle_list[i], " ")
+      fontname_style = splited_style[0] + splited_style[1]
+    endif
+  endif
+
   fontfamily = "$FAMILYNAME"
   disp_fontfamily = "$DISP_FAMILYNAME"
-  fontname_style = fontstyle_list[i]
   base_style = fontstyle_list[i]
   copyright = "###COPYRIGHT###"
   version = "$VERSION"
@@ -258,10 +288,10 @@ while (i < SizeOf(input_list))
   SetTTFName(0x409, 0, copyright)
   SetTTFName(0x409, 1, disp_fontfamily)
   SetTTFName(0x409, 2, fontstyle_list[i])
-  SetTTFName(0x409, 3, "FontForge 2.0 : " + \$fullname + " : " + Strftime("%d-%m-%Y", 0))
+  SetTTFName(0x409, 3, disp_fontfamily + " : " + Strftime("%d-%m-%Y", 0))
   SetTTFName(0x409, 4, disp_fontfamily + " " + fontstyle_list[i])
   SetTTFName(0x409, 5, version)
-  SetTTFName(0x409, 6, fontfamily + "-" + fontstyle_list[i])
+  SetTTFName(0x409, 6, fontfamily + "-" + fontname_style)
   # TTF名設定 - 日本語
   # SetTTFName(0x411, 1, "${DISP_FAMILYNAME_JP}")
   # SetTTFName(0x411, 2, fontstyle_list[i])
@@ -312,6 +342,20 @@ while (i < SizeOf(input_list))
     endif
     j++
   endloop
+
+  # 斜体に変形
+  if (${ITALIC_FLAG} == 1)
+    SelectWorthOutputting()
+    Italic(${ITALIC_ANGLE})
+    foreach
+      w = GlyphInfo("Width")
+      if (w > 0 && w > ${HALF_WIDTH})
+        SetWidth(${ORIG_FULL_WIDTH}, 0)
+      elseif (w > 0)
+        SetWidth(${ORIG_HALF_WIDTH}, 0)
+      endif
+    endloop
+  endif
 
   # 全角スペースの可視化
   Select(0u3000); Clear()
@@ -476,26 +520,35 @@ done
 #   pyftsubset "${target}" '*' --drop-tables+=vhea --drop-tables+=vmtx --layout-features='*' --glyph-names --symbol-cmap --legacy-cmap --notdef-glyph --notdef-outline --recommended-glyphs --name-IDs='*' --name-legacy --name-languages='*'
 # done
 
+if [ $ITALIC_FLAG -eq 1 ]
+then
+  regular_name='Italic'
+  bold_name='BoldItalic'
+else
+  regular_name='Regular'
+  bold_name='Bold'
+fi
+
 if [ $NERD_FONTS_FLAG -eq 1 ]
 then
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS_REGULAR}"
-  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS_REGULAR}"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf"
 
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS_BOLD}"
-  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_NERD_FONTS_BOLD}"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf"
 elif [ $W35_FLAG -eq 1 ]
 then
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD35_REGULAR}"
-  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD35_REGULAR}"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf"
 
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD35_BOLD}"
-  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD35_BOLD}"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf"
 else
-  # pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Regular.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR}"
-  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Regular.ttf"
+  # pyftmerge "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR%%.ttf}.subset.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_REGULAR}"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-${regular_name}.ttf"
 
-  # pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
-  pyftmerge "${WORK_DIR}/${FAMILYNAME}-Bold.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD}"
-  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-Bold.ttf"
+  # pyftmerge "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD%%.ttf}.subset.ttf"
+  pyftmerge "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf_hinted" "${WORK_DIR}/${MODIFIED_FONT_BIZUD_BOLD}"
+  mv -f merged.ttf "${WORK_DIR}/${FAMILYNAME}-${bold_name}.ttf"
 fi
