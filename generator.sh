@@ -188,7 +188,11 @@ while (i < SizeOf(input_list))
 
   # JPDOC版では、日本語ドキュメントで使用頻度の高い記号はBIZ UDゴシックを優先して適用する
   if ($JPDOC_FLAG == 1)
-    Select(0u00F7) # ÷
+    SelectNone()
+    SelectMore(0u00A7) # §
+    SelectMore(0u00B1) # ±
+    SelectMore(0u00B6) # ¶
+    SelectMore(0u00F7) # ÷
     SelectMore(0u00D7) # ×
     SelectMore(0u21D2) # ⇒
     SelectMore(0u21D4) # ⇔
@@ -205,6 +209,7 @@ while (i < SizeOf(input_list))
     SelectMore(0u221E) # ∞
     SelectMore(0u2010, 0u2022) # ‐-•
     SelectMore(0u2026) # …
+    SelectMore(0u2030) # ‰
     SelectMore(0u2190, 0u2194) # ←-↔
     SelectMore(0u2196, 0u2199) # ↖-↙
     SelectMore(0u2200) # ∀
