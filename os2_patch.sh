@@ -11,7 +11,7 @@ FONT_PATTERN=${PREFIX}${FAMILYNAME}'*.ttf'
 
 if [ $W35_FLAG -eq 1 ]
 then
-  xAvgCharWidth_SETVAL=1227
+  xAvgCharWidth_SETVAL=2045
 fi
 
 for P in ${BASE_DIR}/${FONT_PATTERN}
