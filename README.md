@@ -7,6 +7,11 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 [👉 ダウンロード](https://github.com/yuru7/udev-gothic/releases)  
 ※「Assets」内の zip ファイルをダウンロードしてご利用ください。
 
+> 💡 その他、公開中のプログラミングフォント
+> - 日本語文字に源柔ゴシック、英数字部分に Hack を使った [**白源 (はくげん／HackGen)**](https://github.com/yuru7/HackGen)
+> - 日本語文字に IBM Plex Mono、英数字部分に IBM Plex Sans JP を使った [**PlemolJP (プレモル ジェイピー)**](https://github.com/yuru7/PlemolJP)
+> - 日本語文字に源真ゴシック、英数字部分に Fira Mono を使った [**Firge (ファージ)**](https://github.com/yuru7/Firge)
+
 ## 特徴
 
 以下の特徴を備えています。
