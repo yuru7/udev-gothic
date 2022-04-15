@@ -32,11 +32,14 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 | リガチャ対応版 | JetBrains Mono に含まれるリガチャに対応したバリエーション。 | `UDEVGothic*LG*-*.ttf`<br>※ファイル名に `LG` が含まれたもの |
 | Nerd Fonts 対応版 | [Nerd Fonts](https://www.nerdfonts.com/) を追加合成したバリエーション。拡張Powerline記号など、お洒落なターミナルで利用される記号を収録。<br>⚠ 制限事項あり (*1) | `UDEVGothic*NF*-*.ttf`<br>※ファイル名に `NF` が含まれたもの |
 
-> ⚠ *1: Nerd Fonts の仕様により一部の漢字グリフが Nerd Fonts グリフに上書きされるため、`﨑` のような旧字体など一部のコードポイントで、漢字ではなく Nerd Fonts のアイコンが表示されます。また、この影響で IVS (異体字シーケンス) にも当該バリエーションでは非対応となります。Nerd Fonts を必要とする用途以外は、NF版以外のバリエーションを利用することを推奨します。
+> ⚠  
+> *1: Nerd Fonts の仕様により一部の漢字グリフが Nerd Fonts グリフに上書きされるため、`﨑` のような旧字体など一部のコードポイントで、漢字ではなく Nerd Fonts のアイコンが表示されます。また、この影響で IVS (異体字シーケンス) にも当該バリエーションでは非対応となります。Nerd Fonts を必要とする用途以外は、NF版以外のバリエーションを利用することを推奨します。
 
 ## 表示サンプル
 
-![image](https://user-images.githubusercontent.com/13458509/160800245-9d9fce55-f980-46ce-b630-63e439fc3f27.png)
+| 通常版 (幅比率 半角1:全角2) | 35版 (幅比率 半角3:全角5) |
+| :---: | :---: |
+| ![image](https://user-images.githubusercontent.com/13458509/163554505-af07d1b1-574a-42a0-a7c4-01cccef75537.png) | ![image](https://user-images.githubusercontent.com/13458509/163554472-de0ebb09-9f82-4d61-8c68-51dbc938858a.png) |
 
 | リガチャ ON | リガチャ OFF |
 | :---: | :---: |
