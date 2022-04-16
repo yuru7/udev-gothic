@@ -7,6 +7,11 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 [👉 ダウンロード](https://github.com/yuru7/udev-gothic/releases)  
 ※「Assets」内の zip ファイルをダウンロードしてご利用ください。
 
+> 💡 その他、公開中のプログラミングフォント
+> - 日本語文字に源柔ゴシック、英数字部分に Hack を使った [**白源 (はくげん／HackGen)**](https://github.com/yuru7/HackGen)
+> - 日本語文字に IBM Plex Mono、英数字部分に IBM Plex Sans JP を使った [**PlemolJP (プレモル ジェイピー)**](https://github.com/yuru7/PlemolJP)
+> - 日本語文字に源真ゴシック、英数字部分に Fira Mono を使った [**Firge (ファージ)**](https://github.com/yuru7/Firge)
+
 ## 特徴
 
 以下の特徴を備えています。
@@ -22,16 +27,19 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 
 | バリエーション|説明|命名パターン |
 | --- | --- | --- |
-| 文字幅比率 半角3:全角5 | JetBrains Mono を縮小せずに合成し、半角3:全角5の文字幅比率としたバリエーション。通常版と比べ、半角文字が広めに表示される。| `UDEVGothic35*-*.ttf`<br>※ファイル名に `35` が含まれたもの |
+| 文字幅比率 半角3:全角5 | JetBrains Mono を縮小せずに合成し、半角3:全角5の文字幅比率としたバリエーション。通常版と比べ、半角文字がゆとりを持った幅で表示される。| `UDEVGothic35*-*.ttf`<br>※ファイル名に `35` が含まれたもの |
 | 日本語文書向け | 日本語文書で頻出する記号類 ( `← ↓ ↑ → □ ■ …` など) がBIZ UDゴシックの全角記号で表示される。 ※通常版の UDEV Gothic では、JetBrains Mono のグリフが優先されるため半角で表示される。 (全角表示されるようになる記号一覧は [こちら](doc/JPDOC.txt)) | `UDEVGothic*JPDOC*-*.ttf`<br>※ファイル名に `JPDOC` が含まれたもの |
 | リガチャ対応版 | JetBrains Mono に含まれるリガチャに対応したバリエーション。 | `UDEVGothic*LG*-*.ttf`<br>※ファイル名に `LG` が含まれたもの |
-| NerdFonts 対応版 | [Nerd Fonts](https://www.nerdfonts.com/) を追加合成したバリエーション。拡張Powerline記号など、お洒落なターミナルで利用される記号を収録。<br>⚠ 制限事項あり (*1) | `UDEVGothic*NF*-*.ttf`<br>※ファイル名に `NF` が含まれたもの |
+| Nerd Fonts 対応版 | [Nerd Fonts](https://www.nerdfonts.com/) を追加合成したバリエーション。拡張Powerline記号など、お洒落なターミナルで利用される記号を収録。<br>⚠ 制限事項あり (*1) | `UDEVGothic*NF*-*.ttf`<br>※ファイル名に `NF` が含まれたもの |
 
-> ⚠ *1: Nerd Fonts の仕様により一部の漢字グリフが Nerd Fonts グリフに上書きされるため、`﨑` のような旧字体など一部のコードポイントで、漢字ではなく Nerd Fonts のアイコンが表示されます。また、この影響で IVS (異体字シーケンス) にも当該バリエーションでは非対応となります。Nerd Fonts を必要とする用途以外は、NF版以外のバリエーションを利用することを推奨します。
+> ⚠  
+> *1: Nerd Fonts の仕様により一部の漢字グリフが Nerd Fonts グリフに上書きされるため、`﨑` のような旧字体など一部のコードポイントで、漢字ではなく Nerd Fonts のアイコンが表示されます。また、この影響で IVS (異体字シーケンス) にも当該バリエーションでは非対応となります。Nerd Fonts を必要とする用途以外は、NF版以外のバリエーションを利用することを推奨します。
 
 ## 表示サンプル
 
-![image](https://user-images.githubusercontent.com/13458509/160800245-9d9fce55-f980-46ce-b630-63e439fc3f27.png)
+| 通常版 (幅比率 半角1:全角2) | 35版 (幅比率 半角3:全角5) |
+| :---: | :---: |
+| ![image](https://user-images.githubusercontent.com/13458509/163554505-af07d1b1-574a-42a0-a7c4-01cccef75537.png) | ![image](https://user-images.githubusercontent.com/13458509/163554472-de0ebb09-9f82-4d61-8c68-51dbc938858a.png) |
 
 | リガチャ ON | リガチャ OFF |
 | :---: | :---: |
