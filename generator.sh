@@ -219,6 +219,7 @@ while (i < SizeOf(input_list))
     SelectMore(0u2225, 0u222B) # ∥-∫
     SelectMore(0u2260, 0u2262) # ≠-≢
     SelectMore(0u2282, 0u2287) # ⊂-⊇
+    SelectMore(0u2500, 0u257F) # ─-╿ (Box Drawing)
     Clear()
   endif
 
