@@ -126,8 +126,8 @@ SelectMore(0uf000, 0uf2e0)
 SelectMore(0uf300, 0uf31c)
 # Material Design Icons
 SelectMore(0uf500, 0ufd46)
-# Pomicons -> 商用不可のため除外
-SelectFewer(0ue000, 0ue00d)
+# Pomicons
+SelectMore(0ue000, 0ue00a)
 '
 
 # JetBrains Monoの調整
