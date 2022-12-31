@@ -128,6 +128,8 @@ SelectMore(0uf300, 0uf31c)
 SelectMore(0uf500, 0ufd46)
 # Pomicons
 SelectMore(0ue000, 0ue00a)
+# Codicons
+SelectMore(0uea60, 0uebeb)
 '
 
 # JetBrains Monoの調整

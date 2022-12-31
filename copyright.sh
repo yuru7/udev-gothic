@@ -17,7 +17,7 @@ Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/
 Copyright (c) 2014, Ryan L McIntyre (https://ryanlmcintyre.com).
 
 [UDEV Gothic]
-Copyright (c) 2022, Yuko OTAWARA'
+Copyright (c) 2022, Yuko Otawara'
 
 for P in ${BASE_DIR}/${FONT_PATTERN}
 do
