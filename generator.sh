@@ -222,6 +222,10 @@ while (i < SizeOf(input_list))
     SelectMore(0u2260, 0u2262) # ≠-≢
     SelectMore(0u2282, 0u2287) # ⊂-⊇
     SelectMore(0u2500, 0u257F) # ─-╿ (Box Drawing)
+    SelectMore(0uFF5B) # ｛
+    SelectMore(0uFF5D) # ｝
+    SelectMore(0u2018, 0u2019) # ‘ ’
+    SelectMore(0u201C, 0u201D) # “ ”
     Clear()
   endif
 
