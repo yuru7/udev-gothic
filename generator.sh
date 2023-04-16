@@ -188,7 +188,7 @@ while (i < SizeOf(input_list))
     endif
   endloop
 
-  # JPDOC版では、日本語ドキュメントで使用頻度の高い記号はBIZ UDゴシックを優先して適用する
+  # JPDOC版では、日本語ドキュメントで使用頻度の高い記号にBIZ UDゴシックの全角グリフを優先して適用する
   if ($JPDOC_FLAG == 1)
     SelectNone()
     SelectMore(0u00A7) # §
@@ -198,34 +198,36 @@ while (i < SizeOf(input_list))
     SelectMore(0u00D7) # ×
     SelectMore(0u21D2) # ⇒
     SelectMore(0u21D4) # ⇔
-    SelectMore(0u21E7, 0u21E8) # ⇧-⇨
     SelectMore(0u25A0, 0u25A1) # ■-□
     SelectMore(0u25B2, 0u25B3) # ▲-△
-    SelectMore(0u25B6, 0u25B7) # ▶-▷
     SelectMore(0u25BC, 0u25BD) # ▼-▽
-    SelectMore(0u25C0, 0u25C1) # ◀-◁
     SelectMore(0u25C6, 0u25C7) # ◆-◇
+    SelectMore(0u25CB) # ○
     SelectMore(0u25CE, 0u25CF) # ◎-●
+    SelectMore(0u25E5) # ◥
     SelectMore(0u25EF) # ◯
     SelectMore(0u221A) # √
     SelectMore(0u221E) # ∞
-    SelectMore(0u2010, 0u2022) # ‐-•
+    SelectMore(0u2010) # ‐
+    SelectMore(0u2018, 0u201A) # ‘-‚
+    SelectMore(0u201C, 0u201E) # “-„
+    SelectMore(0u2020, 0u2021) # †-‡
     SelectMore(0u2026) # …
     SelectMore(0u2030) # ‰
-    SelectMore(0u2190, 0u2194) # ←-↔
-    SelectMore(0u2196, 0u2199) # ↖-↙
+    SelectMore(0u2190, 0u2193) # ←-↓
     SelectMore(0u2200) # ∀
     SelectMore(0u2202, 0u2203) # ∂-∃
-    SelectMore(0u2208, 0u220C) # ∈-∌
-    SelectMore(0u2211, 0u2212) # ∑-−
-    SelectMore(0u2225, 0u222B) # ∥-∫
-    SelectMore(0u2260, 0u2262) # ≠-≢
-    SelectMore(0u2282, 0u2287) # ⊂-⊇
+    SelectMore(0u2208) # ∈
+    SelectMore(0u220B) # ∋
+    SelectMore(0u2211) # ∑
+    SelectMore(0u2225) # ∥
+    SelectMore(0u2227, 0u222C) # ∧-∬
+    SelectMore(0u2260, 0u2261) # ≠-≡
+    SelectMore(0u2282, 0u2283) # ⊂-⊃
+    SelectMore(0u2286, 0u2287) # ⊆-⊇
     SelectMore(0u2500, 0u257F) # ─-╿ (Box Drawing)
     SelectMore(0uFF5B) # ｛
     SelectMore(0uFF5D) # ｝
-    SelectMore(0u2018, 0u2019) # ‘ ’
-    SelectMore(0u201C, 0u201D) # “ ”
     Clear()
   endif
 
