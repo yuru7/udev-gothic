@@ -188,6 +188,17 @@ while (i < SizeOf(input_list))
     endif
   endloop
 
+  # 等幅版だと幾何学模様 (U+25A0-U+25FF) グリフが横幅をはみ出しすぎるので縮小する
+  if (${W35_FLAG} == 0)
+    Select(0u25A0, 0u25FF)
+    foreach
+      if (WorthOutputting())
+        Scale(91, 91)
+        SetWidth(${HALF_WIDTH}, 0)
+      endif
+    endloop
+  endif
+
   # JPDOC版では、日本語ドキュメントで使用頻度の高い記号にBIZ UDゴシックの全角グリフを優先して適用する
   if ($JPDOC_FLAG == 1)
     SelectNone()
