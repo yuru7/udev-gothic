@@ -237,10 +237,13 @@ while (i < SizeOf(input_list))
     SelectMore(0u2282, 0u2283) # ⊂-⊃
     SelectMore(0u2286, 0u2287) # ⊆-⊇
     SelectMore(0u2500, 0u257F) # ─-╿ (Box Drawing)
-    SelectMore(0uFF5B) # ｛
-    SelectMore(0uFF5D) # ｝
     Clear()
   endif
+
+  # FULLWIDTH RIGHT CURLY BRACKET は全角優先にするため削除
+  Select(0uFF5B) # ｛
+  SelectMore(0uFF5D) # ｝
+  Clear()
 
   # BIZ UDゴシックから削除するグリフリストの作成
   array_end = 65535
@@ -389,6 +392,17 @@ while (i < SizeOf(input_list))
   # 全角スペースの可視化
   Select(0u3000); Clear()
   MergeFonts("${PATH_IDEOGRAPHIC_SPACE}")
+
+  # 全角系の括弧位置を調整する
+  bracket_move = $((${ORIG_FULL_WIDTH} / 6))
+  Select(0uff08) # (
+  SelectMore(0uff3b) # [
+  SelectMore(0uff5b) # {
+  Move(-bracket_move, 0); SetWidth(${ORIG_FULL_WIDTH})
+  Select(0uff09) # )
+  SelectMore(0uff3d) # ]
+  SelectMore(0uff5d) # }
+  Move(bracket_move, 0); SetWidth(${ORIG_FULL_WIDTH})
 
   # 高さ調整
   SetOS2Value("WinAscentIsOffset",       0)
