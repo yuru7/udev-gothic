@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "fontforge_script デバッグ",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/fontforge_script.py",
+            "console": "integratedTerminal",
+            "python": "C:/Program Files (x86)/FontForgeBuilds/bin/ffpython.exe"
+        },
+        {
+            "name": "fonttools_script デバッグ",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/fonttools_script.py",
+            "console": "integratedTerminal",
+        },
+    ]
+}
