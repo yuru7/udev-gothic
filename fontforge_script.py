@@ -321,6 +321,8 @@ def slash_zero(eng_font, style):
     if "Italic" in style:
         for glyph in eng_font.selection.select(("unicode", None), 0x0030).byGlyphs:
             glyph.transform(psMat.skew(ITALIC_ANGLE * math.pi / 180))
+            glyph.transform(psMat.translate(-46, 0))
+            glyph.width = eng_font[0x0020].width
 
 
 def adjust_em(font):
@@ -447,7 +449,7 @@ def remove_jpdoc_symbols(eng_font):
 def adjust_width_35_eng(eng_font):
     """英語フォントを半角3:全角5幅になるように変換する"""
     original_half_width = eng_font[0x0030].width
-    after_width = FULL_WIDTH_35 * 3 / 5
+    after_width = int(FULL_WIDTH_35 * 3 / 5)
     x_scale = after_width / original_half_width
     for glyph in eng_font.glyphs():
         if 0 < glyph.width < after_width:
@@ -467,7 +469,7 @@ def adjust_width_35_eng(eng_font):
 
 def adjust_width_35_jp(jp_font):
     """日本語フォントを半角3:全角5幅になるように変換する"""
-    after_width = FULL_WIDTH_35 * 3 / 5
+    after_width = int(FULL_WIDTH_35 * 3 / 5)
     jp_half_width = jp_font[0x3000].width / 2
     jp_full_width = jp_font[0x3000].width
     for glyph in jp_font.glyphs():
@@ -559,9 +561,7 @@ def add_nerd_font_glyphs(jp_font, eng_font):
     global nerd_font
     # Nerd Fontのグリフを追加する
     if nerd_font is None:
-        nerd_font = fontforge.open(
-            f"{SOURCE_FONTS_DIR}/nerd-fonts/SymbolsNerdFont-Regular.ttf"
-        )
+        nerd_font = fontforge.open(f"{SOURCE_FONTS_DIR}/SymbolsNerdFont-Regular.ttf")
         nerd_font.em = EM_ASCENT + EM_DESCENT
         glyph_names = set()
         for nerd_glyph in nerd_font.glyphs():
