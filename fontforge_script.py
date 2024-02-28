@@ -8,6 +8,7 @@ import os
 import shutil
 import sys
 import uuid
+from decimal import ROUND_HALF_UP, Decimal
 
 import fontforge
 import psMat
@@ -187,8 +188,18 @@ def generate_font(jp_style, eng_style, merged_style):
     delete_glyphs_with_duplicate_glyph_names(jp_font)
 
     # メタデータを編集する
-    edit_meta_data(eng_font, merged_style, variant)
-    edit_meta_data(jp_font, merged_style, variant)
+    cap_height = int(
+        Decimal(str(eng_font[0x0048].boundingBox()[3])).quantize(
+            Decimal("0"), ROUND_HALF_UP
+        )
+    )
+    x_height = int(
+        Decimal(str(eng_font[0x0078].boundingBox()[3])).quantize(
+            Decimal("0"), ROUND_HALF_UP
+        )
+    )
+    edit_meta_data(eng_font, merged_style, variant, cap_height, x_height)
+    edit_meta_data(jp_font, merged_style, variant, cap_height, x_height)
 
     # ttfファイルに保存
     # ヒンティングが残っていると不具合に繋がりがちなので外す。
@@ -637,25 +648,22 @@ def delete_glyphs_with_duplicate_glyph_names(font):
             glyph_name_set.add(glyph.glyphname)
 
 
-def edit_meta_data(font, weight: str, variant: str):
+def edit_meta_data(font, weight: str, variant: str, cap_height: int, x_height: int):
     """フォント内のメタデータを編集する"""
     font.ascent = EM_ASCENT
     font.descent = EM_DESCENT
 
-    if NERD_FONTS_STR in variant:
-        # Nerd Fonts の場合は typoascent, typodescent を EM ascent, EM descent よりも大きくする
-        font.os2_typoascent = OS2_ASCENT
-        font.os2_typodescent = -OS2_DESCENT
-    else:
-        font.os2_typoascent = EM_ASCENT
-        font.os2_typodescent = -EM_DESCENT
-    font.os2_typolinegap = 0
+    font.os2_typoascent = OS2_ASCENT
+    font.os2_typodescent = -OS2_DESCENT
     font.os2_winascent = OS2_ASCENT
     font.os2_windescent = OS2_DESCENT
 
     font.hhea_ascent = OS2_ASCENT
     font.hhea_descent = -OS2_DESCENT
     font.hhea_linegap = 0
+
+    font.os2_xheight = x_height
+    font.os2_capheight = cap_height
 
     font.sfnt_names = (
         (

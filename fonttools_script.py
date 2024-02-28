@@ -124,7 +124,7 @@ def fix_font_tables(style, variant):
     # post テーブルを編集
     fix_post_table(xml, flag_35=WIDTH_35_STR in variant)
     # cmap テーブルを編集
-    # fix_cmap_table(xml, style, variant)
+    fix_cmap_table(xml, style, variant)
 
     # ttxファイルを上書き保存
     xml.write(
