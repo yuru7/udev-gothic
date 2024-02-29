@@ -324,10 +324,10 @@ def adjust_some_glyph(jp_font, eng_font):
 
 def slash_zero(eng_font, style):
     eng_font[0x0030].clear()
-    if style == "Regular" or style == "Italic":
-        eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Regular.sfd")
-    else:
+    if "Bold" in style:
         eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Bold.sfd")
+    else:
+        eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Regular.sfd")
     # 斜体変換
     if "Italic" in style:
         for glyph in eng_font.selection.select(("unicode", None), 0x0030).byGlyphs:
