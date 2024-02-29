@@ -31,6 +31,7 @@ WIDTH_35_STR = settings.get("DEFAULT", "WIDTH_35_STR")
 INVISIBLE_ZENKAKU_SPACE_STR = settings.get("DEFAULT", "INVISIBLE_ZENKAKU_SPACE_STR")
 JPDOC_STR = settings.get("DEFAULT", "JPDOC_STR")
 NERD_FONTS_STR = settings.get("DEFAULT", "NERD_FONTS_STR")
+LIGA_STR = settings.get("DEFAULT", "LIGA_STR")
 EM_ASCENT = int(settings.get("DEFAULT", "EM_ASCENT"))
 EM_DESCENT = int(settings.get("DEFAULT", "EM_DESCENT"))
 OS2_ASCENT = int(settings.get("DEFAULT", "OS2_ASCENT"))
@@ -181,6 +182,7 @@ def generate_font(jp_style, eng_style, merged_style):
     )
     variant += JPDOC_STR if options.get("jpdoc") else ""
     variant += NERD_FONTS_STR if options.get("nerd-font") else ""
+    variant += LIGA_STR if options.get("liga") else ""
 
     # macOSでのpostテーブルの使用性エラー対策
     # 重複するグリフ名を持つグリフをリネームする
@@ -204,13 +206,12 @@ def generate_font(jp_style, eng_style, merged_style):
     # ttfファイルに保存
     # ヒンティングが残っていると不具合に繋がりがちなので外す。
     # ヒンティングはあとで ttfautohint で行う。
+    # flags=("no-hints", "omit-instructions") を使うとヒンティングだけでなく GPOS や GSUB も削除されてしまうので使わない
     eng_font.generate(
         f"{BUILD_FONTS_DIR}/{FONTFORGE_PREFIX}{FONT_NAME}{variant}-{merged_style}-eng.ttf",
-        flags=("no-hints", "omit-instructions"),
     )
     jp_font.generate(
         f"{BUILD_FONTS_DIR}/{FONTFORGE_PREFIX}{FONT_NAME}{variant}-{merged_style}-jp.ttf",
-        flags=("no-hints", "omit-instructions"),
     )
 
     # ttfを閉じる
@@ -373,9 +374,12 @@ def remove_lookups(font):
 def transform_italic_glyphs(font):
     # 傾きを設定する
     font.italicangle = -ITALIC_ANGLE
+    orig_width = font[0x3000].width
     # 全グリフを斜体に変換
     for glyph in font.glyphs():
         glyph.transform(psMat.skew(ITALIC_ANGLE * math.pi / 180))
+        glyph.transform(psMat.translate(-94, 0))
+        glyph.width = orig_width
 
 
 def remove_jpdoc_symbols(eng_font):
@@ -576,6 +580,8 @@ def add_nerd_font_glyphs(jp_font, eng_font):
         nerd_font.em = EM_ASCENT + EM_DESCENT
         glyph_names = set()
         for nerd_glyph in nerd_font.glyphs():
+            # Nerd Fontsのグリフ名をユニークにするため接尾辞を付ける
+            nerd_glyph.glyphname = f"{nerd_glyph.glyphname}-nf"
             # postテーブルでのグリフ名重複対策
             # fonttools merge で合成した後、MacOSで `'post'テーブルの使用性` エラーが発生することへの対処
             if nerd_glyph.glyphname in glyph_names:

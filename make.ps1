@@ -13,8 +13,12 @@ Remove-Item -Path .\build -Recurse -Force
 $option_and_output_folder = @(
     @("--nerd-font", "NF-"), # ビルド 通常版 + Nerd Fonts
     @("--35 --nerd-font", "35NF-"), # ビルド 1:2幅版 + Nerd Fonts
+    @("--nerd-font --liga", "NFLG-"), # ビルド 通常版 + Nerd Fonts + リガチャ
+    @("--35 --nerd-font --liga", "35NFLG-"), # ビルド 1:2幅版 + Nerd Fonts + リガチャ
     @("", "-"), # ビルド 通常版
     @("--35", "35-"), # ビルド 1:2幅版
+    @("--liga", "LG-"), # ビルド 通常版 + リガチャ
+    @("--35 --liga", "35LG-"), # ビルド 1:2幅版 + リガチャ
     @("--jpdoc", "JPDOC-"), # ビルド JPDOC版
     @("--35 --jpdoc", "35JPDOC-") # ビルド 1:2幅 JPDOC版
 )
@@ -27,7 +31,7 @@ $option_and_output_folder | Foreach-Object -ThrottleLimit 4 -Parallel {
 }
 
 $move_file_src_dest = @(
-    @("UDEVGothic*NF-*.ttf", "UDEVGothic_NF_$version"),
+    @("UDEVGothic*NF*-*.ttf", "UDEVGothic_NF_$version"),
     @("UDEVGothic*-*.ttf", "UDEVGothic_$version")
 )
 
