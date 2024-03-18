@@ -163,6 +163,8 @@ def generate_font(jp_style, eng_style, merged_style):
     else:
         # 1:2 幅にする
         transform_half_width(eng_font)
+        # 幅からはみ出たグリフを縮小する
+        down_scale_redundant_size_glyph(eng_font)
 
     # GSUBテーブルを削除する (ひらがな等の全角文字が含まれる行でリガチャが解除される対策)
     remove_lookups(jp_font)
@@ -519,6 +521,41 @@ def transform_half_width(eng_font):
             if 0x25A0 <= glyph.unicode <= 0x25FF:
                 glyph.transform(psMat.scale(0.91, 0.91))
                 glyph.width = after_width_eng_multiply
+
+
+def down_scale_redundant_size_glyph(eng_font):
+    """規定の幅からはみ出したグリフサイズを縮小する"""
+
+    # 元々の x=0 の位置が縮小後、はみ出した場合の位置
+    x_zero_pos_after_reduction = -42
+
+    for glyph in eng_font.glyphs():
+        bounding_x_min = glyph.boundingBox()[0]
+        if (
+            glyph.width > 0
+            and bounding_x_min < 0
+            and not (
+                0x0020 <= glyph.unicode <= 0x02AF
+            )  # latin 系のグリフ 0x0020 - 0x0192 は無視
+            and not (
+                0xE0B0 <= glyph.unicode <= 0xE0D4
+            )  # Powerline系のグリフ 0xE0B0 - 0xE0D4 は無視
+            and not (
+                0x2500 <= glyph.unicode <= 0x257F
+            )  # 罫線系のグリフ 0x2500 - 0x257F は無視
+            and not (
+                0x2591 <= glyph.unicode <= 0x2593
+            )  # SHADE グリフ 0x2591 - 0x2593 は無視
+        ):
+            before_width = glyph.width
+            if bounding_x_min > x_zero_pos_after_reduction:
+                x_scale = 1 + (bounding_x_min * 2) / glyph.width
+            else:
+                # はみ出し幅が特定の値以上の場合は縮小率を固定する
+                x_scale = 1 + (x_zero_pos_after_reduction * 2) / glyph.width
+            glyph.transform(psMat.scale(x_scale, 1))
+            glyph.transform(psMat.translate((before_width - glyph.width) / 2, 0))
+            glyph.width = before_width
 
 
 def visualize_zenkaku_space(jp_font):
