@@ -374,9 +374,9 @@ def remove_lookups(font):
 def transform_italic_glyphs(font):
     # 傾きを設定する
     font.italicangle = -ITALIC_ANGLE
-    orig_width = font[0x3000].width
     # 全グリフを斜体に変換
     for glyph in font.glyphs():
+        orig_width = glyph.width
         glyph.transform(psMat.skew(ITALIC_ANGLE * math.pi / 180))
         glyph.transform(psMat.translate(-94, 0))
         glyph.width = orig_width
@@ -663,6 +663,7 @@ def edit_meta_data(font, weight: str, variant: str, cap_height: int, x_height: i
     font.os2_typodescent = -OS2_DESCENT
     font.os2_winascent = OS2_ASCENT
     font.os2_windescent = OS2_DESCENT
+    font.os2_typolinegap = 0
 
     font.hhea_ascent = OS2_ASCENT
     font.hhea_descent = -OS2_DESCENT
