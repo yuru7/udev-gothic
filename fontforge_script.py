@@ -370,7 +370,12 @@ def delete_duplicate_glyphs(jp_font, eng_font):
 def remove_lookups(font):
     """GSUB, GPOSテーブルを削除する"""
     for lookup in list(font.gsub_lookups) + list(font.gpos_lookups):
-        font.removeLookup(lookup)
+        # 縦書き用のGSUBテーブルは削除しない
+        # ただしリガチャ版の合成の場合には日本語フォント側のGSUBテーブルが残っていると
+        # なぜか「'あ' === data」のように日本語が含まれる行でリガチャが解除される
+        # 不具合があるため、リガチャ版では問答無用でGSUBテーブルを削除する
+        if options.get("liga") or ("vrt2" not in lookup and "vert" not in lookup):
+            font.removeLookup(lookup)
 
 
 def transform_italic_glyphs(font):
