@@ -145,11 +145,11 @@ def generate_font(jp_style, eng_style, merged_style):
     if options.get("jpdoc"):
         remove_jpdoc_symbols(eng_font)
 
-    # 重複するグリフを削除する
-    delete_duplicate_glyphs(jp_font, eng_font)
-
     # いくつかのグリフ形状に調整を加える
     adjust_some_glyph(jp_font, eng_font)
+
+    # 重複するグリフを削除する
+    delete_duplicate_glyphs(jp_font, eng_font)
 
     # 日本語グリフの斜体を生成する
     if "Italic" in merged_style:
@@ -167,7 +167,13 @@ def generate_font(jp_style, eng_style, merged_style):
         down_scale_redundant_size_glyph(eng_font)
 
     # GSUBテーブルを削除する (ひらがな等の全角文字が含まれる行でリガチャが解除される対策)
-    remove_lookups(jp_font)
+    if options.get("liga"):
+        # ただしリガチャ版の合成の場合には日本語フォント側のGSUBテーブルが残っていると
+        # なぜか「'あ' === data」のように日本語が含まれる行でリガチャが解除される
+        # 不具合があるため、リガチャ版では問答無用でGSUBテーブルを削除する
+        remove_lookups(jp_font, remove_gsub=True, remove_gpos=True)
+    else:
+        remove_lookups(jp_font, remove_gsub=False, remove_gpos=True)
 
     # 全角スペースを可視化する
     if not options.get("invisible-zenkaku-space"):
@@ -306,11 +312,11 @@ def adjust_some_glyph(jp_font, eng_font):
     full_width = jp_font[0x3042].width
     for glyph_name in [0xFF08, 0xFF3B, 0xFF5B]:
         glyph = jp_font[glyph_name]
-        glyph.transform(psMat.translate(-180, 0))
+        glyph.transform(psMat.translate(-(full_width / 6), 0))
         glyph.width = full_width
     for glyph_name in [0xFF09, 0xFF3D, 0xFF5D]:
         glyph = jp_font[glyph_name]
-        glyph.transform(psMat.translate(180, 0))
+        glyph.transform(psMat.translate((full_width / 6), 0))
         glyph.width = full_width
     # LEFT SINGLE QUOTATION MARK (U+2018) ～ DOUBLE LOW-9 QUOTATION MARK (U+201E) の幅を全角幅にする
     for uni in range(0x2018, 0x201E + 1):
@@ -367,14 +373,13 @@ def delete_duplicate_glyphs(jp_font, eng_font):
     eng_font.selection.none()
 
 
-def remove_lookups(font):
+def remove_lookups(font, remove_gsub=True, remove_gpos=True):
     """GSUB, GPOSテーブルを削除する"""
-    for lookup in list(font.gsub_lookups) + list(font.gpos_lookups):
-        # 縦書き用のGSUBテーブルは削除しない
-        # ただしリガチャ版の合成の場合には日本語フォント側のGSUBテーブルが残っていると
-        # なぜか「'あ' === data」のように日本語が含まれる行でリガチャが解除される
-        # 不具合があるため、リガチャ版では問答無用でGSUBテーブルを削除する
-        if options.get("liga") or ("vrt2" not in lookup and "vert" not in lookup):
+    if remove_gsub:
+        for lookup in font.gsub_lookups:
+            font.removeLookup(lookup)
+    if remove_gpos:
+        for lookup in font.gpos_lookups:
             font.removeLookup(lookup)
 
 
