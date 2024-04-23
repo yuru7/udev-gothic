@@ -4,7 +4,7 @@ UDEV Gothic は、ユニバーサルデザインフォントの [BIZ UDゴシッ
 
 BIZ UDゴシックの優れた機能美はそのままに、調和的で判読性の高い英数字を提供することを目指しています。
 
-[👉 ダウンロード](https://github.com/yuru7/udev-gothic/releases)  
+[👉 ダウンロード](https://github.com/yuru7/udev-gothic/releases/latest)  
 ※「Assets」内の zip ファイルをダウンロードしてご利用ください。
 
 > 💡 その他、公開中のプログラミングフォント
