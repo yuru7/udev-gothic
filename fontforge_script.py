@@ -98,7 +98,7 @@ def main():
 def usage():
     print(
         f"Usage: {sys.argv[0]} "
-        "[--invisible-zenkaku-space] [--35] [--jpdoc] [--nerd-font] [--liga]"
+        "[--invisible-zenkaku-space] [--35] [--jpdoc] [--nerd-font] [--liga] [--dot-zero]"
     )
 
 
