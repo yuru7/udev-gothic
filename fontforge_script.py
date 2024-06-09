@@ -30,6 +30,7 @@ IDEOGRAPHIC_SPACE = settings.get("DEFAULT", "IDEOGRAPHIC_SPACE")
 WIDTH_35_STR = settings.get("DEFAULT", "WIDTH_35_STR")
 INVISIBLE_ZENKAKU_SPACE_STR = settings.get("DEFAULT", "INVISIBLE_ZENKAKU_SPACE_STR")
 JPDOC_STR = settings.get("DEFAULT", "JPDOC_STR")
+DOT_ZERO_STR = settings.get("DEFAULT", "DOT_ZERO_STR")
 NERD_FONTS_STR = settings.get("DEFAULT", "NERD_FONTS_STR")
 LIGA_STR = settings.get("DEFAULT", "LIGA_STR")
 EM_ASCENT = int(settings.get("DEFAULT", "EM_ASCENT"))
@@ -124,6 +125,8 @@ def get_options():
             options["nerd-font"] = True
         elif arg == "--liga":
             options["liga"] = True
+        elif arg == "--dot-zero":
+            options["dot-zero"] = True
         else:
             options["unknown-option"] = True
             return
@@ -136,7 +139,8 @@ def generate_font(jp_style, eng_style, merged_style):
     jp_font, eng_font = open_fonts(jp_style, eng_style)
 
     # 0 をスラッシュゼロにする
-    slash_zero(eng_font, eng_style)
+    if not options.get("dot-zero"):
+        slash_zero(eng_font, eng_style)
 
     # フォントのEMを揃える
     adjust_em(eng_font)
@@ -188,6 +192,7 @@ def generate_font(jp_style, eng_style, merged_style):
     variant += (
         INVISIBLE_ZENKAKU_SPACE_STR if options.get("invisible-zenkaku-space") else ""
     )
+    variant += DOT_ZERO_STR if options.get("dot-zero") else ""
     variant += JPDOC_STR if options.get("jpdoc") else ""
     variant += NERD_FONTS_STR if options.get("nerd-font") else ""
     variant += LIGA_STR if options.get("liga") else ""
