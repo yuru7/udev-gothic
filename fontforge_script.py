@@ -724,6 +724,11 @@ def edit_meta_data(font, weight: str, variant: str, cap_height: int, x_height: i
     font.os2_xheight = x_height
     font.os2_capheight = cap_height
 
+    if "Regular" == weight or "Italic" == weight:
+        font.os2_weight = 400
+    elif "Bold" in weight:
+        font.os2_weight = 700
+
     font.sfnt_names = (
         (
             "English (US)",
