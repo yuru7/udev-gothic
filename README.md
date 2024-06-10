@@ -43,6 +43,20 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 | :---: | :---: |
 | ![image](https://user-images.githubusercontent.com/13458509/159891788-b97865ee-9b94-4691-b44e-f39f55a8bdef.png) | ![image](https://user-images.githubusercontent.com/13458509/159892000-99b356e5-42d0-4007-85eb-424abc386a05.png) |
 
+## ビルド
+
+- fontforge: `20230101` \[[Windows](https://fontforge.org/en-US/downloads/windows/)\] \[[Linux](https://fontforge.org/en-US/downloads/gnulinux/)\]
+- Python: `>=3.12`
+
+### Windows (PowerShell Core)
+
+```sh
+# 必要パッケージのインストール
+pip install -r requirements.txt
+# ビルド
+& "C:\Program Files (x86)\FontForgeBuilds\bin\ffpython.exe" .\fontforge_script.py && python3 .\fonttools_script.py
+```
+
 ## ライセンス
 
 SIL OPEN FONT LICENSE Version 1.1 が適用され、商用・非商用問わず利用可能です。
