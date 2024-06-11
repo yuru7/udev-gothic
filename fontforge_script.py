@@ -576,10 +576,17 @@ def down_scale_redundant_size_glyph(eng_font):
 def visualize_zenkaku_space(jp_font):
     """全角スペースを可視化する"""
     # 全角スペースを差し替え
+    glyph = jp_font[0x3000]
+    width_to = glyph.width
+    glyph.clear()
+    jp_font.mergeFonts(fontforge.open(f"{SOURCE_FONTS_DIR}/{IDEOGRAPHIC_SPACE}"))
+    # 幅を設定し位置調整
     jp_font.selection.select("U+3000")
     for glyph in jp_font.selection.byGlyphs:
-        glyph.clear()
-    jp_font.mergeFonts(fontforge.open(f"{SOURCE_FONTS_DIR}/{IDEOGRAPHIC_SPACE}"))
+        width_from = glyph.width
+        glyph.transform(psMat.translate((width_to - width_from) / 2, 0))
+        glyph.width = width_to
+    jp_font.selection.none()
 
 
 def add_box_drawing_block_elements(jp_font, eng_font):
