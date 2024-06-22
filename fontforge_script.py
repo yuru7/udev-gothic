@@ -337,17 +337,23 @@ def adjust_some_glyph(jp_font, eng_font):
 
 
 def slash_zero(eng_font, style):
-    eng_font[0x0030].clear()
-    if "Bold" in style:
-        eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Bold.sfd")
-    else:
-        eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Regular.sfd")
-    # 斜体変換
-    if "Italic" in style:
-        for glyph in eng_font.selection.select(("unicode", None), 0x0030).byGlyphs:
-            glyph.transform(psMat.skew(ITALIC_ANGLE * math.pi / 180))
-            glyph.transform(psMat.translate(-46, 0))
-            glyph.width = eng_font[0x0020].width
+    # eng_font[0x0030].clear()
+    # if "Bold" in style:
+    #     eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Bold.sfd")
+    # else:
+    #     eng_font.mergeFonts(f"{SOURCE_FONTS_DIR}/zero-Regular.sfd")
+    # # 斜体変換
+    # if "Italic" in style:
+    #     for glyph in eng_font.selection.select(("unicode", None), 0x0030).byGlyphs:
+    #         glyph.transform(psMat.skew(ITALIC_ANGLE * math.pi / 180))
+    #         glyph.transform(psMat.translate(-46, 0))
+    #         glyph.width = eng_font[0x0020].width
+    eng_font.selection.select("zero.zero")
+    eng_font.copy()
+    eng_font.selection.select("zero")
+    eng_font.clear()
+    eng_font.paste()
+    eng_font.selection.none()
 
 
 def adjust_em(font):
@@ -541,14 +547,18 @@ def transform_half_width(eng_font):
 def down_scale_redundant_size_glyph(eng_font):
     """規定の幅からはみ出したグリフサイズを縮小する"""
 
-    # 元々の x=0 の位置が縮小後、はみ出した場合の位置
-    x_zero_pos_after_reduction = -42
-
     for glyph in eng_font.glyphs():
-        bounding_x_min = glyph.boundingBox()[0]
+        xmin = glyph.boundingBox()[0]
+        xmax = glyph.boundingBox()[2]
+
         if (
             glyph.width > 0
-            and bounding_x_min < 0
+            and -15
+            < xmin
+            < 0  # 特定幅より左にはみ出している場合、意図的にはみ出しているものと見なして無視
+            and abs(xmin) - 10
+            < xmax - glyph.width
+            < abs(xmin) + 10  # はみ出し幅が左側と右側で極端に異なる場合は無視
             and not (
                 0x0020 <= glyph.unicode <= 0x02AF
             )  # latin 系のグリフ 0x0020 - 0x0192 は無視
@@ -562,15 +572,30 @@ def down_scale_redundant_size_glyph(eng_font):
                 0x2591 <= glyph.unicode <= 0x2593
             )  # SHADE グリフ 0x2591 - 0x2593 は無視
         ):
-            before_width = glyph.width
-            if bounding_x_min > x_zero_pos_after_reduction:
-                x_scale = 1 + (bounding_x_min * 2) / glyph.width
-            else:
-                # はみ出し幅が特定の値以上の場合は縮小率を固定する
-                x_scale = 1 + (x_zero_pos_after_reduction * 2) / glyph.width
-            glyph.transform(psMat.scale(x_scale, 1))
-            glyph.transform(psMat.translate((before_width - glyph.width) / 2, 0))
-            glyph.width = before_width
+            scale_glyph(glyph, 1 + (xmin / glyph.width) * 2, 1)
+
+
+def scale_glyph(glyph, scale_x, scale_y):
+    """グリフのスケールを調整する"""
+    original_width = glyph.width
+    # スケール前の中心位置を求める
+    before_bb = glyph.boundingBox()
+    before_center_x = (before_bb[0] + before_bb[2]) / 2
+    before_center_y = (before_bb[1] + before_bb[3]) / 2
+    # スケール変換
+    glyph.transform(psMat.scale(scale_x, scale_y))
+    # スケール後の中心位置を求める
+    after_bb = glyph.boundingBox()
+    after_center_x = (after_bb[0] + after_bb[2]) / 2
+    after_center_y = (after_bb[1] + after_bb[3]) / 2
+    # 拡大で増えた分を考慮して中心位置を調整
+    glyph.transform(
+        psMat.translate(
+            before_center_x - after_center_x,
+            before_center_y - after_center_y,
+        )
+    )
+    glyph.width = original_width
 
 
 def visualize_zenkaku_space(jp_font):
