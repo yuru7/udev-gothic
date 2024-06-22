@@ -553,12 +553,12 @@ def down_scale_redundant_size_glyph(eng_font):
 
         if (
             glyph.width > 0
-            and -15
+            and -45
             < xmin
             < 0  # 特定幅より左にはみ出している場合、意図的にはみ出しているものと見なして無視
-            and abs(xmin) - 10
+            and abs(xmin) - 40
             < xmax - glyph.width
-            < abs(xmin) + 10  # はみ出し幅が左側と右側で極端に異なる場合は無視
+            < abs(xmin) + 40  # はみ出し幅が左側と右側で極端に異なる場合は無視
             and not (
                 0x0020 <= glyph.unicode <= 0x02AF
             )  # latin 系のグリフ 0x0020 - 0x0192 は無視
