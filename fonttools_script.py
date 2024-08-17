@@ -254,6 +254,12 @@ def fix_post_table(xml: ET, flag_35):
     # タグ形式: <isFixedPitch value="0"/>
     is_fixed_pitch = 0 if flag_35 else 1
     xml.find("post/isFixedPitch").set("value", str(is_fixed_pitch))
+    # underlinePosition, underlineThicknessを編集
+    # <underlinePosition value="-155"/>
+    # <underlineThickness value="50"/>
+    # EM 1000 -> 2048 の拡大率に合わせて値を調整
+    xml.find("post/underlinePosition").set("value", "-317")
+    xml.find("post/underlineThickness").set("value", "102")
 
 
 def fix_cmap_table(xml: ET, style: str, variant: str):
