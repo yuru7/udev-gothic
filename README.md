@@ -45,6 +45,8 @@ BIZ UDゴシックの優れた機能美はそのままに、調和的で判読�
 
 ## ビルド
 
+環境:
+
 - fontforge: `20230101` \[[Windows](https://fontforge.org/en-US/downloads/windows/)\] \[[Linux](https://fontforge.org/en-US/downloads/gnulinux/)\]
 - Python: `>=3.12`
 
@@ -56,6 +58,17 @@ pip install -r requirements.txt
 # ビルド
 & "C:\Program Files (x86)\FontForgeBuilds\bin\ffpython.exe" .\fontforge_script.py && python3 .\fonttools_script.py
 ```
+
+### ビルドオプション
+
+`fontforge_script.py` 実行時、以下のオプションを指定できます。
+
+- `--35`: 半角3:全角5 の幅にする
+- `--jpdoc`: 日本語文書頻出記号を全角にする
+- `--nerd-font`: Nerd Fonts を追加合成する
+- `--liga`: リガチャを加える
+- `--hidden-zenkaku-space`: 全角スペース可視化を無効化
+- `--dot-zero`: `0` をドットゼロにする
 
 ## ライセンス
 

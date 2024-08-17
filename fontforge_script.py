@@ -28,7 +28,7 @@ VENDER_NAME = settings.get("DEFAULT", "VENDER_NAME")
 FONTFORGE_PREFIX = settings.get("DEFAULT", "FONTFORGE_PREFIX")
 IDEOGRAPHIC_SPACE = settings.get("DEFAULT", "IDEOGRAPHIC_SPACE")
 WIDTH_35_STR = settings.get("DEFAULT", "WIDTH_35_STR")
-INVISIBLE_ZENKAKU_SPACE_STR = settings.get("DEFAULT", "INVISIBLE_ZENKAKU_SPACE_STR")
+HIDDEN_ZENKAKU_SPACE_STR = settings.get("DEFAULT", "HIDDEN_ZENKAKU_SPACE_STR")
 JPDOC_STR = settings.get("DEFAULT", "JPDOC_STR")
 DOT_ZERO_STR = settings.get("DEFAULT", "DOT_ZERO_STR")
 NERD_FONTS_STR = settings.get("DEFAULT", "NERD_FONTS_STR")
@@ -98,7 +98,7 @@ def main():
 def usage():
     print(
         f"Usage: {sys.argv[0]} "
-        "[--invisible-zenkaku-space] [--35] [--jpdoc] [--nerd-font] [--liga] [--dot-zero]"
+        "[--hidden-zenkaku-space] [--35] [--jpdoc] [--nerd-font] [--liga] [--dot-zero]"
     )
 
 
@@ -115,8 +115,8 @@ def get_options():
         # オプション判定
         if arg == "--do-not-delete-build-dir":
             options["do-not-delete-build-dir"] = True
-        elif arg == "--invisible-zenkaku-space":
-            options["invisible-zenkaku-space"] = True
+        elif arg == "--hidden-zenkaku-space":
+            options["hidden-zenkaku-space"] = True
         elif arg == "--35":
             options["35"] = True
         elif arg == "--jpdoc":
@@ -180,7 +180,7 @@ def generate_font(jp_style, eng_style, merged_style):
         remove_lookups(jp_font, remove_gsub=False, remove_gpos=True)
 
     # 全角スペースを可視化する
-    if not options.get("invisible-zenkaku-space"):
+    if not options.get("hidden-zenkaku-space"):
         visualize_zenkaku_space(jp_font)
 
     # Nerd Fontのグリフを追加する
@@ -189,9 +189,7 @@ def generate_font(jp_style, eng_style, merged_style):
 
     # オプション毎の修飾子を追加する
     variant = WIDTH_35_STR if options.get("35") else ""
-    variant += (
-        INVISIBLE_ZENKAKU_SPACE_STR if options.get("invisible-zenkaku-space") else ""
-    )
+    variant += HIDDEN_ZENKAKU_SPACE_STR if options.get("hidden-zenkaku-space") else ""
     variant += DOT_ZERO_STR if options.get("dot-zero") else ""
     variant += JPDOC_STR if options.get("jpdoc") else ""
     variant += NERD_FONTS_STR if options.get("nerd-font") else ""

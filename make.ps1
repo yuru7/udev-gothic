@@ -11,16 +11,22 @@ Remove-Item -Path .\build -Recurse -Force
 
 # 並列処理内で、処理が重いNerd Fontsのビルドを優先して処理する
 $option_and_output_folder = @(
-    @("--nerd-font", "NF-"), # ビルド 通常版 + Nerd Fonts
-    @("--35 --nerd-font", "35NF-"), # ビルド 1:2幅版 + Nerd Fonts
-    @("--nerd-font --liga", "NFLG-"), # ビルド 通常版 + Nerd Fonts + リガチャ
-    @("--35 --nerd-font --liga", "35NFLG-"), # ビルド 1:2幅版 + Nerd Fonts + リガチャ
-    @("", "-"), # ビルド 通常版
-    @("--35", "35-"), # ビルド 1:2幅版
-    @("--liga", "LG-"), # ビルド 通常版 + リガチャ
-    @("--35 --liga", "35LG-"), # ビルド 1:2幅版 + リガチャ
-    @("--jpdoc", "JPDOC-"), # ビルド JPDOC版
-    @("--35 --jpdoc", "35JPDOC-") # ビルド 1:2幅 JPDOC版
+    @("--nerd-font", "NF-"), # ビルド 1:2幅 + Nerd Fonts
+    @("--35 --nerd-font", "35NF-"), # ビルド 3:5幅 + Nerd Fonts
+    @("--nerd-font --liga", "NFLG-"), # ビルド 1:2幅 + Nerd Fonts + リガチャ
+    @("--35 --nerd-font --liga", "35NFLG-"), # ビルド 3:5幅 + Nerd Fonts + リガチャ
+    @("", "-"), # ビルド 1:2幅
+    @("--35", "35-"), # ビルド 3:5幅
+    @("--liga", "LG-"), # ビルド 1:2幅 + リガチャ
+    @("--35 --liga", "35LG-"), # ビルド 3:5幅 + リガチャ
+    @("--jpdoc", "JPDOC-"), # ビルド 1:2幅 JPDOC版
+    @("--35 --jpdoc", "35JPDOC-"), # ビルド 3:5幅 JPDOC版
+    @("--hidden-zenkaku-space ", "HS-"), # ビルド 1:2 全角スペース不可視
+    @("--hidden-zenkaku-space --35", "35HS-"), # ビルド 3:5 全角スペース不可視
+    @("--hidden-zenkaku-space --liga", "HSLG-"), # ビルド 1:2 全角スペース不可視 + リガチャ
+    @("--hidden-zenkaku-space --35 --liga", "35HSLG-"), # ビルド 3:5 全角スペース不可視 + リガチャ
+    @("--hidden-zenkaku-space --jpdoc", "HSJPDOC-"), # ビルド 1:2 全角スペース不可視 JPDOC版
+    @("--hidden-zenkaku-space --35 --jpdoc", "35HSJPDOC-") # ビルド 3:5 全角スペース不可視 JPDOC版
 )
 
 $option_and_output_folder | Foreach-Object -ThrottleLimit 4 -Parallel {
@@ -31,6 +37,7 @@ $option_and_output_folder | Foreach-Object -ThrottleLimit 4 -Parallel {
 }
 
 $move_file_src_dest = @(
+    @("UDEVGothic*HS*-*.ttf", "UDEVGothic_HS_$version"),
     @("UDEVGothic*NF*-*.ttf", "UDEVGothic_NF_$version"),
     @("UDEVGothic*-*.ttf", "UDEVGothic_$version")
 )
