@@ -627,20 +627,7 @@ def add_nerd_font_glyphs(jp_font, eng_font):
             # 幅を調整する
             half_width = eng_font[0x0030].width
             # Powerline Symbols の調整
-            if 0xE0B0 <= nerd_glyph.unicode <= 0xE0D4:
-                # なぜかズレている右付きグリフの個別調整 (EM 1000 に変更した後を想定して調整)
-                original_width = nerd_glyph.width
-                if nerd_glyph.unicode == 0xE0B2:
-                    nerd_glyph.transform(psMat.translate(-353 * 2.024, 0))
-                elif nerd_glyph.unicode == 0xE0B6:
-                    nerd_glyph.transform(psMat.translate(-414 * 2.024, 0))
-                elif nerd_glyph.unicode == 0xE0C5:
-                    nerd_glyph.transform(psMat.translate(-137 * 2.024, 0))
-                elif nerd_glyph.unicode == 0xE0C7:
-                    nerd_glyph.transform(psMat.translate(-214 * 2.024, 0))
-                elif nerd_glyph.unicode == 0xE0D4:
-                    nerd_glyph.transform(psMat.translate(-314 * 2.024, 0))
-                nerd_glyph.width = original_width
+            if 0xE0B0 <= nerd_glyph.unicode <= 0xE0D7:
                 # 位置と幅合わせ
                 if nerd_glyph.width < half_width:
                     nerd_glyph.transform(
